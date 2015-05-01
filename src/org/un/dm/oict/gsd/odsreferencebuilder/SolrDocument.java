@@ -61,17 +61,18 @@ public class SolrDocument {
 	
 	@Override
 	/**
-	 * 
+	 * This overridden method is used to construct the Solr XML for the document
+	 * used to populate the Solr index
 	 */
 	public String toString() {
 		String xml = "";
-		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
-		xml += "<add>";
-			xml += "<doc>";
-				xml += "<field name=\"id\">" + this.id + "</field>";
-				xml += "<field name=\"symbol\">" + this.symbol + "</field>";
-				xml += "<field name=\"body_" + this.languageCode + "\">" + this.body + "</field>";
-			xml += "</add>";
+		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+		xml += "<add>\n";
+			xml += "<doc>\n";
+				xml += "<field name=\"id\">" + this.id + "</field>\n";
+				xml += "<field name=\"symbol\">" + this.symbol + "</field>\n";
+				xml += "<field name=\"body_" + this.languageCode + "\">" + this.body + "</field>\n";
+			xml += "</add>\n";
 		xml += "</doc>";
 		return xml;
 	}

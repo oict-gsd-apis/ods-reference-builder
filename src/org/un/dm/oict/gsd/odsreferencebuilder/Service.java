@@ -23,6 +23,7 @@ public class Service {
 	static String databaseUsername = "";
 	static String databasePassword = "";
 	static String tikaTesseractServer = "http://frankie:9998/tika";
+	static String referenceRegex = "";
 	
 	/**
 	 * Entry point to application

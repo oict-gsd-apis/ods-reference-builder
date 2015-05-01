@@ -31,19 +31,20 @@ public class ReferenceDocument {
 	
 	@Override
 	/**
-	 * 
+	 * This overridden method is used to construct the Solr XML for the document
+	 * used to populate the Solr index
 	 */
 	public String toString() {
 		String xml = "";
-		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
-		xml += "<add>";
-			xml += "<doc>";
-				xml += "<field name=\"id\">" + this.id + "</field>";
-				xml += "<field name=\"symbol\">" + this.symbol + "</field>";
+		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+		xml += "<add>\n";
+			xml += "<doc>\n";
+				xml += "<field name=\"id\">" + this.id + "</field>\n";
+				xml += "<field name=\"symbol\">" + this.symbol + "</field>\n";
 				for(String ref : this.references) {
-					xml += "<field name=\"reference\">" + ref + "</field>";
+					xml += "<field name=\"reference\">" + ref + "</field>\n";
 				}
-			xml += "</add>";
+			xml += "</add>\n";
 		xml += "</doc>";
 		return xml;
 	}
