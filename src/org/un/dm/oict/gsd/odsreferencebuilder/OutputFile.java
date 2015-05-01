@@ -1,7 +1,7 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
 public class OutputFile {
-	static void writeSolrDocument() {}
+	static void writeSolrDocument(String filename, String xml) {}
 	
-	static void writeReferenceDocument() {}
+	static void writeReferenceDocument(String filename, String xml) {}
 }
