@@ -1,12 +1,14 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/*
-* Solr doc - id, url, .....
+/* 
+* Author: Kevin Thomas Bradley
+* Date: 1-May-2015
+* Description: This class represents a Solr Document
+* Version: 1.0
+* Code Reviewer:
 */
 public class SolrDocument {
 	

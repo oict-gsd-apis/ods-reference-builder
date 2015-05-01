@@ -9,6 +9,13 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 
+/* 
+* Author: Kevin Thomas Bradley
+* Date: 1-May-2015
+* Description: This class is used to extract data from a file and map this
+* Version: 1.0
+* Code Reviewer:
+*/
 public class TextExtractorFile {
 	
 	static SolrDocument readXmlDocument(String currXmlFilename) { 

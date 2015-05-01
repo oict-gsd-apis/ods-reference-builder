@@ -5,6 +5,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/* 
+* Author: Kevin Thomas Bradley
+* Date: 1-May-2015
+* Description: This class is used process an existing Solr Document, copying the values
+* and applying business logic to the new file to remove unwanted content
+* Version: 1.0
+* Code Reviewer:
+*/
 public class FileProcessor {
 	
 	static SolrDocument processFile(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) {

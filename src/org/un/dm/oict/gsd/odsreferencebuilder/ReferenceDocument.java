@@ -3,8 +3,12 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-* Reference doc - id, symbol, url, lang, publicationDate, references MLF
+/* 
+* Author: Kevin Thomas Bradley
+* Date: 1-May-2015
+* Description: This class represents a ODS Reference Explorer Document
+* Version: 1.0
+* Code Reviewer:
 */
 public class ReferenceDocument {
 

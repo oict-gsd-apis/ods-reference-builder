@@ -5,6 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/* 
+* Author: Kevin Thomas Bradley
+* Date: 1-May-2015
+* Description: This class is used to connect to our Tika/Tesseract Instance (Check One Pager)
+* and extract parsed body
+* Version: 1.0
+* Code Reviewer:
+*/
 public class TextExtractorOCR {
 
 	static String obtainText(SolrDocument newSolrDocument) { 
@@ -40,7 +48,9 @@ public class TextExtractorOCR {
         String line = "";
         try {
 			while ((line = br.readLine()) != null) {
-				body += line;
+				// Remove excess white space
+				if (line.length() > 0)
+					body += line.replaceAll("[\n\r]","") + "\n";
 			}
 		} catch (IOException e) {
 			return "";
