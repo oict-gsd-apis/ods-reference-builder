@@ -9,15 +9,20 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 
-/* 
-* Author: Kevin Thomas Bradley
-* Date: 1-May-2015
-* Description: This class is used to extract data from a file and map this
-* Version: 1.0
-* Code Reviewer:
-*/
+/**
+ * @author Kevin Thomas Bradley
+ * @dateCreated 1-May-2015
+ * @description This class is used to extract data from a file and map this
+ * @version 1.0
+ * @codeReviewer
+ */
 public class TextExtractorFile {
 	
+	/**
+	 * 
+	 * @param currXmlFilename
+	 * @return
+	 */
 	static SolrDocument readXmlDocument(String currXmlFilename) { 
 		SolrDocument currentSolrDocument = new SolrDocument();
 		try {
@@ -35,6 +40,12 @@ public class TextExtractorFile {
 	}
 	
 	// TODO Expansion of business logic required
+	/**
+	 * 
+	 * @param currentSolrDocument
+	 * @param doc
+	 * @return
+	 */
 	static SolrDocument mapXmlSolrDocument(SolrDocument currentSolrDocument, Document doc) {
 		
 	    currentSolrDocument.setId( getXmlElement(doc, "id") );
@@ -58,6 +69,12 @@ public class TextExtractorFile {
 	    
 	}
 	
+	/**
+	 * 
+	 * @param doc
+	 * @param fieldName
+	 * @return
+	 */
 	static String getXmlElement(Document doc, String fieldName) {
 		String field = "";
 		XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -70,6 +87,8 @@ public class TextExtractorFile {
 		return field;
 	}
 
-	
+	/**
+	 * 
+	 */
 	static void obtainText() {}
 }

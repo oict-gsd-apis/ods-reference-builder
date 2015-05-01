@@ -3,13 +3,13 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.util.HashMap;
 import java.util.Map;
 
-/* 
-* Author: Kevin Thomas Bradley
-* Date: 1-May-2015
-* Description: This class represents a Solr Document
-* Version: 1.0
-* Code Reviewer:
-*/
+/**
+ * @author Kevin Thomas Bradley
+ * @dateCreated 1-May-2015
+ * @description This class represents a Solr Document
+ * @version 1.0
+ * @codeReviewer
+ */
 public class SolrDocument {
 	
 	protected String id;
@@ -51,12 +51,18 @@ public class SolrDocument {
 	protected String pdfXMPTpgNPages;
 	protected String dateCreated;
 	
+	/**
+	 * 
+	 */
 	public SolrDocument() {
 		this.sessions = new HashMap<String, String>();
 		this.agendas = new HashMap<String, String>();
 	}
 	
 	@Override
+	/**
+	 * 
+	 */
 	public String toString() {
 		String xml = "";
 		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";

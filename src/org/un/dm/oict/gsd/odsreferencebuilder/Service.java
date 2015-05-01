@@ -2,15 +2,15 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.io.File;
 
-/* 
-* Author: Kevin Thomas Bradley
-* Date: 1-May-2015
-* Description: This class is the entry point to the application, it loops
-* through each .xml file within a directory and process this using other classes
-* in the solution
-* Version: 1.0
-* Code Reviewer:
-*/
+/**
+ * @author Kevin Thomas Bradley
+ * @dateCreated 1-May-2015
+ * @description This class is the entry point to the application, it loops
+ * through each .xml file within a directory and process this using other classes
+ * in the solution.
+ * @version 1.0
+ * @codeReviewer
+ */
 public class Service {
 	
 	static String xmlFileDirectory = "/Users/kevinbradley/Desktop/testFiles";

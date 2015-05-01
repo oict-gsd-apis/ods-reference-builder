@@ -5,16 +5,22 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/* 
-* Author: Kevin Thomas Bradley
-* Date: 1-May-2015
-* Description: This class is used process an existing Solr Document, copying the values
-* and applying business logic to the new file to remove unwanted content
-* Version: 1.0
-* Code Reviewer:
-*/
+/**
+ * @author Kevin Thomas Bradley
+ * @dateCreated 1-May-2015
+ * @description This class is used process an existing Solr Document, copying the values
+ * and applying business logic to the new file to remove unwanted content
+ * @version 1.0
+ * @codeReviewer
+ */
 public class FileProcessor {
 	
+	/**
+	 * 
+	 * @param currentSolrDocument
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument processFile(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) {
 		
 		newSolrDocument = extractMapData(currentSolrDocument, newSolrDocument);
@@ -25,12 +31,23 @@ public class FileProcessor {
 	}
 	
 	// TODO Expansion of business logic required
+	/**
+	 * 
+	 * @param currentSolrDocument
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument extractMapData(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) { 
 		newSolrDocument.setId( currentSolrDocument.getId() );
 		newSolrDocument.setBody( currentSolrDocument.getBody() );
 		return newSolrDocument;
 	}
 
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument cleanseData(SolrDocument newSolrDocument) { 
 		// Remove ? from particular fields
 		newSolrDocument = processQMarks(newSolrDocument);
@@ -46,6 +63,11 @@ public class FileProcessor {
 		return newSolrDocument; 
 	}
 	
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument processQMarks(SolrDocument newSolrDocument) { 
 		String replaceChar = "?";
 		newSolrDocument.setId( newSolrDocument.getId().contains( replaceChar ) ? newSolrDocument.getId().replace( replaceChar , "") : newSolrDocument.getId() );
@@ -53,18 +75,33 @@ public class FileProcessor {
 	}
 	
 	// TODO Implement logic
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument processEmptyTitles(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
 		return newSolrDocument;
 	}
 	
 	// TODO Implement logic
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument processFutureDates(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
 		return newSolrDocument;
 	}
 	
 	// TODO Identify problematic characters
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument processBodyText(SolrDocument newSolrDocument) { 
 		String body = newSolrDocument.getBody();
 		// If bodies text is insufficient call Tika/OCR server and obtain new body
@@ -76,6 +113,11 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	static SolrDocument processFieldSize(SolrDocument newSolrDocument) {
 		String size = newSolrDocument.getSize();
 		try {
@@ -88,6 +130,12 @@ public class FileProcessor {
 	}
 	
 	// TODO Expansion of business logic required
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @param newReferenceDocument
+	 * @return
+	 */
 	static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
 	    String body = newSolrDocument.getBody();
 	    List<String> refs = new ArrayList<String>();

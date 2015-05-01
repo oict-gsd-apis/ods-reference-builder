@@ -3,13 +3,13 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-/* 
-* Author: Kevin Thomas Bradley
-* Date: 1-May-2015
-* Description: This class represents a ODS Reference Explorer Document
-* Version: 1.0
-* Code Reviewer:
-*/
+/**
+ * @author Kevin Thomas Bradley
+ * @dateCreated 1-May-2015
+ * @description This class represents a ODS Reference Explorer Document
+ * @version 1.0
+ * @codeReviewer
+ */
 public class ReferenceDocument {
 
 	protected String id;
@@ -21,11 +21,17 @@ public class ReferenceDocument {
 	protected String dateCreated;
 	protected List<String> references;
 	
+	/**
+	 * 
+	 */
 	public ReferenceDocument() {
 		this.references = new ArrayList<String>();
 	}
 	
 	@Override
+	/**
+	 * 
+	 */
 	public String toString() {
 		return "ReferenceDocument [id=" + id + ", symbol=" + symbol
 				+ ", title=" + title + ", publicationDate=" + publicationDate
