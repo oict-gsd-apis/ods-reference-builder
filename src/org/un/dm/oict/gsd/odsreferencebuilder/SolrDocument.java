@@ -70,6 +70,7 @@ public class SolrDocument {
 			xml += "<doc>";
 				xml += "<field name=\"id\">" + this.id + "</field>";
 				xml += "<field name=\"symbol\">" + this.symbol + "</field>";
+				xml += "<field name=\"body_" + this.languageCode + "\">" + this.body + "</field>";
 			xml += "</add>";
 		xml += "</doc>";
 		return xml;

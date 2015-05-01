@@ -19,6 +19,7 @@ public class ReferenceDocument {
 	protected String url;
 	protected String languageCode;
 	protected String dateCreated;
+	// Multi-valued Solr Field
 	protected List<String> references;
 	
 	/**
@@ -33,10 +34,18 @@ public class ReferenceDocument {
 	 * 
 	 */
 	public String toString() {
-		return "ReferenceDocument [id=" + id + ", symbol=" + symbol
-				+ ", title=" + title + ", publicationDate=" + publicationDate
-				+ ", url=" + url + ", languageCode=" + languageCode
-				+ ", dateCreated=" + dateCreated + "]";
+		String xml = "";
+		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+		xml += "<add>";
+			xml += "<doc>";
+				xml += "<field name=\"id\">" + this.id + "</field>";
+				xml += "<field name=\"symbol\">" + this.symbol + "</field>";
+				for(String ref : this.references) {
+					xml += "<field name=\"reference\">" + ref + "</field>";
+				}
+			xml += "</add>";
+		xml += "</doc>";
+		return xml;
 	}
 	
 	public String getId() {
