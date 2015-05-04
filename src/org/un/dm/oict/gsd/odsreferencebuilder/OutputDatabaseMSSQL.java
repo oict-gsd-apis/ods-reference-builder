@@ -108,7 +108,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 */
 	public boolean insertProblem(String problemType, String documentId, String text) {
 		try {			    
-		    String qry = "INSERT INTO \""+ (problemType == "Warning"?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + "\" (\"DocumentId\", \"Text\",) VALUES(?, ?)";
+		    String qry = "INSERT INTO "+ (problemType == "Warning"?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + " (\"DocumentId\", \"Text\",) VALUES(?, ?)";
 		    Map<Integer, Object> params = new HashMap<Integer, Object>();
 		    params.put(1, documentId);
 		    params.put(2, text);
