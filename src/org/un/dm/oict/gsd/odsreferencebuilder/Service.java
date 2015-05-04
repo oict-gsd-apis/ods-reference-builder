@@ -1,6 +1,8 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.io.File;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * @author Kevin Thomas Bradley
@@ -24,12 +26,18 @@ public class Service {
 	static String databasePassword = "";
 	static String tikaTesseractServer = "http://frankie:9998/tika";
 	static String referenceRegex = "";
+	static char[] invalidChars = {'\uFFFD','\uF02A'};
+	
+	static BlockingQueue<SolrDocument> processedSolrDocuments;
+	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 	
 	/**
 	 * Entry point to application
 	 * @param args
 	 */
 	public static void main(String args[]) {
+		processedSolrDocuments = new ArrayBlockingQueue<>(1000000);
+		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
 		performTask(xmlFileDirectory);
 	}
 	
@@ -40,7 +48,7 @@ public class Service {
 	 * @param xmlFilesDirectory
 	 */
 	static void performTask(String xmlFilesDirectory) {
-		
+				
 		// Set file directory for XML files
 		File dir = new File(xmlFilesDirectory);
 		File[] directoryListing = dir.listFiles();
@@ -48,38 +56,46 @@ public class Service {
 		if (directoryListing != null) {
 			// Loop each file within the directory
 			for (File child : directoryListing) {
-				// Get current filename
-				String currXmlFilename = child.getAbsolutePath();
-				// Verify its an XML file, that is all we are interested in
-				if (currXmlFilename.endsWith(".xml")) {
-					
-					// Instantiate two new SolrDocuments and one Reference Document
-					SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
-					SolrDocument newSolrDocument = new SolrDocument();
-					ReferenceDocument newReferenceDocument = new ReferenceDocument();
-
-					// Process the Solr Document - Cleanse & apply business logic
-					// If required obtain a new body
-					newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
+				// Recurse through this directory
+				if (child.isDirectory()) {
+					performTask(child.getAbsolutePath());
+				} else {
+					// Get current filename
+					String currXmlFilename = child.getAbsolutePath();
+					// Verify its an XML file, that is all we are interested in
+					if (currXmlFilename.endsWith(".xml")) {
+						
+						// Instantiate two new SolrDocuments and one Reference Document
+						SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
+						SolrDocument newSolrDocument = new SolrDocument();
+						ReferenceDocument newReferenceDocument = new ReferenceDocument();
 	
-					// Extract references for all Symbol variations
-					// TODO Test references, there seems to be a lost of noise, code below shows output
-					newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
-					/*String refs = "[";
-					for(String s : newReferenceDocument.getReferences()) {
-						refs += "{" + s + "},";
+						// Process the Solr Document - Cleanse & apply business logic
+						// If required obtain a new body
+						newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
+						processedSolrDocuments.add(newSolrDocument);
+		
+						// Extract references for all Symbol variations
+						// TODO Test references, there seems to be a lost of noise, code below shows output
+						newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
+						processedReferenceDocuments.add(newReferenceDocument);
+						
+						String refs = "[";
+						for(String s : newReferenceDocument.getReferences()) {
+							refs += "{" + s + "},";
+						}
+						refs += "]";
+						System.out.println("Id : " + newReferenceDocument.getId() + " refs: " + refs);
+		
+						// Write out newly created Solr Document
+						/*OutputFile.writeSolrDocument("filename", newSolrDocument.toString());
+						// Write out newly created Reference Document
+						OutputFile.writeReferenceDocument("filename", newReferenceDocument.toString());
+						// Store in Database
+						OutputDatabase.logData();
+						// Optional Func - Write the document to Solr
+						OutputSolr.writeDocumentToSolr();*/
 					}
-					refs += "]";
-					System.out.println("Id : " + newReferenceDocument.getId() + " refs: " + refs);*/
-	
-					// Write out newly created Solr Document
-					/*OutputFile.writeSolrDocument("filename", newSolrDocument.toString());
-					// Write out newly created Reference Document
-					OutputFile.writeReferenceDocument("filename", newReferenceDocument.toString());
-					// Store in Database
-					OutputDatabase.logData();
-					// Optional Func - Write the document to Solr
-					OutputSolr.writeDocumentToSolr();*/
 				}
 			}
 		} 	

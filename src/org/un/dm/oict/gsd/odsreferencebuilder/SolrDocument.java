@@ -51,6 +51,8 @@ public class SolrDocument {
 	protected String pdfXMPTpgNPages;
 	protected String dateCreated;
 	
+	protected boolean requiresNewBody;
+	
 	/**
 	 * 
 	 */
@@ -379,5 +381,13 @@ public class SolrDocument {
 
 	public void setDateCreated(String dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+
+	public boolean getRequiresNewBody() {
+		return requiresNewBody;
+	}
+
+	public void setRequiresNewBody(boolean requiresNewBody) {
+		this.requiresNewBody = requiresNewBody;
 	}
 }

@@ -57,12 +57,15 @@ public class FileProcessor {
 		newSolrDocument = processFutureDates(newSolrDocument);
 		// Check field size is integer If its not an integer set to zero
 		newSolrDocument = processFieldSize(newSolrDocument);
+		// Ensure that the URL contains the Symbol
+		newSolrDocument = ensureSymbolUrl(newSolrDocument);
 		// Check body contains relevant text
 		newSolrDocument = processBodyText(newSolrDocument);
 			
 		return newSolrDocument; 
 	}
 	
+	// TODO Extend functionality
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -71,6 +74,26 @@ public class FileProcessor {
 	static SolrDocument processQMarks(SolrDocument newSolrDocument) { 
 		String replaceChar = "?";
 		newSolrDocument.setId( newSolrDocument.getId().contains( replaceChar ) ? newSolrDocument.getId().replace( replaceChar , "") : newSolrDocument.getId() );
+		//newSolrDocument.setSymbol( newSolrDocument.getSymbol().contains( replaceChar ) ? newSolrDocument.getSymbol().replace( replaceChar , "") : newSolrDocument.getSymbol() );
+		/*alternativeSymbols
+		docType
+		size
+		session1
+		agenda1
+		urlJob
+		subjects
+		publicationDate
+		languageCode
+		dateCreated*/
+		return newSolrDocument;
+	}
+	
+	static SolrDocument ensureSymbolUrl(SolrDocument newSolrDocument) {
+		/*String url = newSolrDocument.getUrl().toUpperCase();
+		String symbol = newSolrDocument.getSymbol().toUpperCase();
+		if (!url.contains(symbol)) {
+			// Log to database
+		}*/
 		return newSolrDocument;
 	}
 	
@@ -105,7 +128,7 @@ public class FileProcessor {
 	static SolrDocument processBodyText(SolrDocument newSolrDocument) { 
 		String body = newSolrDocument.getBody();
 		// If bodies text is insufficient call Tika/OCR server and obtain new body
-		if (body.contains("&#$@%@#$%@#$") || body.isEmpty() || body.length() < 1) {
+		if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
 			String newBody = TextExtractorOCR.obtainText(newSolrDocument);
 			if (!newBody.equals("")) 
 				newSolrDocument.setBody( newBody );
@@ -138,7 +161,7 @@ public class FileProcessor {
 	 */
 	static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
 	    String body = newSolrDocument.getBody();
-	    String regex = "(\\w+[\\-\\./\\(\\)]\\w+[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*)";
+	    String regex = "([A-Z]+[\\-\\./\\(\\)]([A-Z]+|[0-9]+)[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*([A-Z]+|[0-9]+|[a-z]+))";
 	    List<String> refs = new ArrayList<String>();
 		Pattern pattern = Pattern.compile(regex);
 	    Matcher matcher = pattern.matcher(body);
@@ -156,6 +179,21 @@ public class FileProcessor {
 		return newReferenceDocument;
 	}
 	
-
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @param invalidChars
+	 * @return
+	 */
+	static SolrDocument checkBodyContainsInvalidChars(SolrDocument newSolrDocument, char[] invalidChars) {
+		String body = newSolrDocument.getBody();
+		boolean found = false;
+		for(char c : invalidChars) {
+			if (body.contains(Character.toString(c)))
+				found =  true;
+		}
+		newSolrDocument.setRequiresNewBody(found);
+		return newSolrDocument;
+	}
 	
 }

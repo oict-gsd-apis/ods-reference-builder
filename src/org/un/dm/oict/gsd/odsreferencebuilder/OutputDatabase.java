@@ -7,7 +7,7 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
  * @version 1.0
  * @codeReviewer
  */
-public class OutputDatabase {
+public abstract class OutputDatabase {
 	/**
 	 * 
 	 */
