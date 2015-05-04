@@ -130,7 +130,7 @@ public class FileProcessor {
 		// If bodies text is insufficient call Tika/OCR server and obtain new body
 		if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
 			String newBody = TextExtractorOCR.obtainText(newSolrDocument);
-			if (!newBody.equals("")) 
+			if (!newBody.isEmpty()) 
 				newSolrDocument.setBody( newBody );
 		}
 		return newSolrDocument;
@@ -161,7 +161,7 @@ public class FileProcessor {
 	 */
 	static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
 	    String body = newSolrDocument.getBody();
-	    String regex = "([A-Z]+[\\-\\./\\(\\)]([A-Z]+|[0-9]+)[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*([A-Z]+|[0-9]+|[a-z]+))";
+	    String regex = AppProp.referenceRegex;
 	    List<String> refs = new ArrayList<String>();
 		Pattern pattern = Pattern.compile(regex);
 	    Matcher matcher = pattern.matcher(body);

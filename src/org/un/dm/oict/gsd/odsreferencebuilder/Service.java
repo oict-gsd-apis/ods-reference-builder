@@ -1,103 +1,59 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
-import java.io.File;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
- * @description This class is the entry point to the application, it loops
- * through each .xml file within a directory and process this using other classes
- * in the solution.
+ * @description This class is the entry point to the application.
  * @version 1.0
  * @codeReviewer
  */
 public class Service {
 	
-	static String xmlFileDirectory = "/Users/kevinbradley/Desktop/testFiles";
-	static String solrInstance = "";
-	static String solrCollection = "";
-	static String solrUsername = "";
-	static String solrPassword = "";
-	static String databaseLocation = "";
-	static String databaseName = "";
-	static String databaseUsername = "";
-	static String databasePassword = "";
-	static String tikaTesseractServer = "http://frankie:9998/tika";
-	static String referenceRegex = "";
 	static char[] invalidChars = {'\uFFFD','\uF02A'};
 	
+	// Two blocking queues for storing the processed files and consuming them
 	static BlockingQueue<SolrDocument> processedSolrDocuments;
 	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 	
 	/**
-	 * Entry point to application
+	 * Entry point to application, sets variables, initializes the logs
+	 * and starts Producer and Consumer classes on threads
 	 * @param args
 	 */
 	public static void main(String args[]) {
+		
+		// Initialize the two blocking queues
 		processedSolrDocuments = new ArrayBlockingQueue<>(1000000);
 		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
-		performTask(xmlFileDirectory);
-	}
-	
-	/**
-	 * Method which performs the looping of a given directory
-	 * to obtain the relevant xml files, from this it processes each
-	 * and writes the output to an individual file
-	 * @param xmlFilesDirectory
-	 */
-	static void performTask(String xmlFilesDirectory) {
-				
-		// Set file directory for XML files
-		File dir = new File(xmlFilesDirectory);
-		File[] directoryListing = dir.listFiles();
-		// Verify not null
-		if (directoryListing != null) {
-			// Loop each file within the directory
-			for (File child : directoryListing) {
-				// Recurse through this directory
-				if (child.isDirectory()) {
-					performTask(child.getAbsolutePath());
-				} else {
-					// Get current filename
-					String currXmlFilename = child.getAbsolutePath();
-					// Verify its an XML file, that is all we are interested in
-					if (currXmlFilename.endsWith(".xml")) {
-						
-						// Instantiate two new SolrDocuments and one Reference Document
-						SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
-						SolrDocument newSolrDocument = new SolrDocument();
-						ReferenceDocument newReferenceDocument = new ReferenceDocument();
-	
-						// Process the Solr Document - Cleanse & apply business logic
-						// If required obtain a new body
-						newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
-						processedSolrDocuments.add(newSolrDocument);
 		
-						// Extract references for all Symbol variations
-						// TODO Test references, there seems to be a lost of noise, code below shows output
-						newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
-						processedReferenceDocuments.add(newReferenceDocument);
-						
-						String refs = "[";
-						for(String s : newReferenceDocument.getReferences()) {
-							refs += "{" + s + "},";
-						}
-						refs += "]";
-						System.out.println("Id : " + newReferenceDocument.getId() + " refs: " + refs);
+		// Initialize the config file, log file and set the variables
+		Helper.initialiseConfigFile();
+		AppProp.log = Logger.getLogger(Service.class);
+		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
+		AppProp.solrInstance = Helper.getProperty("solrInstance");
+		AppProp.solrCollection = Helper.getProperty("solrCollection");
+		AppProp.solrUsername = Helper.getProperty("solrUsername");
+		AppProp.solrPassword = Helper.getProperty("solrPassword");
+		AppProp.databaseLocation = Helper.getProperty("databaseLocation");
+		AppProp.databaseName = Helper.getProperty("databaseName");
+		AppProp.databaseUsername = Helper.getProperty("databaseUsername");
+		AppProp.databasePassword = Helper.getProperty("databasePassword");
+		AppProp.tikaTesseractServer = Helper.getProperty("tikaTesseractServer");
+		AppProp.referenceRegex = Helper.getProperty("referenceRegex");
 		
-						// Write out newly created Solr Document
-						/*OutputFile.writeSolrDocument("filename", newSolrDocument.toString());
-						// Write out newly created Reference Document
-						OutputFile.writeReferenceDocument("filename", newReferenceDocument.toString());
-						// Store in Database
-						OutputDatabase.logData();
-						// Optional Func - Write the document to Solr
-						OutputSolr.writeDocumentToSolr();*/
-					}
-				}
-			}
-		} 	
+		try { 			
+			// Start the Producer and Consumer on individual threads
+			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments);
+	        new Thread(producer).start();
+	        Consumer consumer = new Consumer(processedSolrDocuments, processedReferenceDocuments);
+	        new Thread(consumer).start();
+		} catch (Exception e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
 	}
 }
