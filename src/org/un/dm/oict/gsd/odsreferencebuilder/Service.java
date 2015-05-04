@@ -28,9 +28,11 @@ public class Service {
 		// Initialize the two blocking queues
 		processedSolrDocuments = new ArrayBlockingQueue<>(1000000);
 		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
-		
+	
 		// Initialize the config file, log file and set the variables
 		initializeVariables();
+		//Establish connection with SQL DB
+		AppProp.database.establishConnection();
 		
 		try { 	
 			// Start the Producer and Consumer on individual threads
@@ -48,7 +50,6 @@ public class Service {
 	 */
 	static void initializeVariables() {
 		// Initialize the config file, log file and set the variables
-		AppProp.database = new OutputDatabaseMSSQL();
 		Helper.initialiseConfigFile();
 		AppProp.log = Logger.getLogger(Service.class);
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
@@ -69,5 +70,6 @@ public class Service {
 		AppProp.referenceRegex = Helper.getProperty("referenceRegex");
 		AppProp.pollDuration = Integer.parseInt(Helper.getProperty("pollDuration"));
 		AppProp.writeSolrDocumentToSolr = Boolean.parseBoolean(Helper.getProperty("writeSolrDocumentToSolr"));
+		AppProp.database = new OutputDatabaseMSSQL();
 	}
 }
