@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 public class TextExtractorFile {
 	
 	/**
-	 * 
+	 * This method reads an XML document then calls the mapper function
 	 * @param currXmlFilename
 	 * @return
 	 */
@@ -70,7 +70,7 @@ public class TextExtractorFile {
 	}
 	
 	/**
-	 * 
+	 * This method gets a specific xml element based on a Solr Schema
 	 * @param doc
 	 * @param fieldName
 	 * @return
