@@ -5,14 +5,12 @@ import java.util.Map;
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
- * @description This class is used to output a particular value to a database - may be generalized
+ * @description This class is used to output a particular value to a database - abstract
  * @version 1.0
  * @codeReviewer
  */
 public abstract class OutputDatabase {
-	/**
-	 * 
-	 */
+
 	abstract boolean isConnected();
 	
 	abstract void establishConnection();
