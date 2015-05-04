@@ -2,7 +2,6 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author Kevin Thomas Bradley
@@ -83,7 +82,8 @@ public class SolrDocument {
 	}
 	
 	public String buildNewFilename() {
-		return "/Users/kevinbradley/Desktop/testFiles/" + UUID.randomUUID() + ".xml";
+		String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
+		return "/Users/kevinbradley/Desktop/testFiles/docs/" + tf;
 	}
 
 	public String getId() {

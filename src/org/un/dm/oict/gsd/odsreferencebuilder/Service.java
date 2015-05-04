@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
  */
 public class Service {
 	
-	static char[] invalidChars = {'\uFFFD','\uF02A'};
-	
 	// Two blocking queues for storing the processed files and consuming them
 	static BlockingQueue<SolrDocument> processedSolrDocuments;
 	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
@@ -34,7 +32,7 @@ public class Service {
 		// Initialize the config file, log file and set the variables
 		initializeVariables();
 		
-		try { 			
+		try { 	
 			// Start the Producer and Consumer on individual threads
 			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments);
 	        new Thread(producer).start();
@@ -50,6 +48,7 @@ public class Service {
 	 */
 	static void initializeVariables() {
 		// Initialize the config file, log file and set the variables
+		AppProp.database = new OutputDatabaseMSSQL();
 		Helper.initialiseConfigFile();
 		AppProp.log = Logger.getLogger(Service.class);
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
@@ -61,6 +60,11 @@ public class Service {
 		AppProp.databaseName = Helper.getProperty("databaseName");
 		AppProp.databaseUsername = Helper.getProperty("databaseUsername");
 		AppProp.databasePassword = Helper.getProperty("databasePassword");
+		AppProp.databasePort = Helper.getProperty("databasePort");
+		AppProp.databaseDocumentTable = Helper.getProperty("databaseDocumentTable");
+		AppProp.databaseReferenceTable = Helper.getProperty("databaseReferenceTable");
+		AppProp.databaseWarningTable = Helper.getProperty("databaseWarningTable");
+		AppProp.databaseErrorTable = Helper.getProperty("databaseErrorTable");
 		AppProp.tikaTesseractServer = Helper.getProperty("tikaTesseractServer");
 		AppProp.referenceRegex = Helper.getProperty("referenceRegex");
 		AppProp.pollDuration = Integer.parseInt(Helper.getProperty("pollDuration"));

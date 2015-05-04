@@ -12,7 +12,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 
 	private Connection connection = null; 
 	
-	
+	@Override
 	/**
 	 * 
 	 * @return
@@ -27,8 +27,9 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 			System.out.println("ERROR: Checking if connected to SQL: " + e.getMessage());
 			return false;
 		}
-	}
-	
+	}	
+
+	@Override
 	/**
 	 * 
 	 */
@@ -45,6 +46,18 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 		}
 	}
 	
+	@Override
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @param folder
+	 * @return
+	 */
+	public boolean insertSolrDocument(SolrDocument newSolrDocument, String folder) {
+		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), folder, newSolrDocument.getFilename());
+	}
+	
+	@Override
 	/**
 	 * 
 	 * @param documentType
@@ -77,6 +90,10 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 		}
 	}
 	
+	@Override
+	/**
+	 * 
+	 */
 	public boolean insertProblem(String problemType, String documentId, String text) {
 		try {			    
 		    String qry = "INSERT INTO \""+ (problemType == "Warning"?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + "\" (\"DocumentId\", \"Text\",) VALUES(?, ?)";
@@ -93,6 +110,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 		}
 	}
 	
+	@Override
 	/**
 	 * 
 	 * @param query
@@ -115,5 +133,4 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 			System.out.println("ERROR: Attempting to run query (" + query + "): " + e.getMessage());
 		}			
 	}
-
 }

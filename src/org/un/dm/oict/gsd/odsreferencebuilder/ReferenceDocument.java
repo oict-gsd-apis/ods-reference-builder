@@ -2,7 +2,6 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author Kevin Thomas Bradley
@@ -53,7 +52,8 @@ public class ReferenceDocument {
 	}
 	
 	public String buildNewFilename() {
-		return "/Users/kevinbradley/Desktop/testFiles/" + UUID.randomUUID() + ".xml";
+		String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
+		return "/Users/kevinbradley/Desktop/testFiles/ref/" + tf;
 	}
 	
 	public String getId() {

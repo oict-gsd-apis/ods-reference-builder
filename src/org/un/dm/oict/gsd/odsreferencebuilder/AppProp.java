@@ -21,6 +21,7 @@ public class AppProp {
 	static String solrPassword = "";
 	static boolean writeSolrDocumentToSolr = false;
 	
+	static OutputDatabase database;
 	static String databaseLocation = "";
 	static String databaseName = "";
 	static String databasePort = "";
@@ -30,6 +31,9 @@ public class AppProp {
 	static String databaseReferenceTable = "";
 	static String databaseWarningTable = "";
 	static String databaseErrorTable = "";
+	
+	static String referenceOutputFolder = "";
+	static String documentOutputFolder = "";
 	
 	static String tikaTesseractServer = "";
 	static String referenceRegex = "";

@@ -78,10 +78,21 @@ public class FileProcessor {
 		//protected Map<String, String> agendas;
 	    
 		newSolrDocument.setBody( currentSolrDocument.getBody() );
+		newSolrDocument.setRequiresNewBody( checkBodyValidity(newSolrDocument) );
 
 		return newSolrDocument;
 	}
+	
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
+	static boolean checkBodyValidity(SolrDocument newSolrDocument) {
+		return checkBodyContainsInvalidChars(newSolrDocument, new char[] {'\uFFFD','\uF02A'});
+	}
 
+	// TODO add removal of breaklines regardless of whether a new body is extracted
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -192,6 +203,7 @@ public class FileProcessor {
 	}
 	
 	// TODO Expansion of business logic required
+	// TODO Counts per reference
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -224,15 +236,14 @@ public class FileProcessor {
 	 * @param invalidChars
 	 * @return
 	 */
-	static SolrDocument checkBodyContainsInvalidChars(SolrDocument newSolrDocument, char[] invalidChars) {
+	static boolean checkBodyContainsInvalidChars(SolrDocument newSolrDocument, char[] invalidChars) {
 		String body = newSolrDocument.getBody();
 		boolean found = false;
 		for(char c : invalidChars) {
 			if (body.contains(Character.toString(c)))
 				found =  true;
 		}
-		newSolrDocument.setRequiresNewBody(found);
-		return newSolrDocument;
+		return found;
 	}
 	
 }

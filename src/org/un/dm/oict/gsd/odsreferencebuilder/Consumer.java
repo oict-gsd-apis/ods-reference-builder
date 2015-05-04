@@ -59,7 +59,7 @@ public class Consumer implements Runnable {
 				OutputFile of = new OutputFile();
 				of.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
 				// Store in Database
-				//OutputDatabase.logData();
+				AppProp.database.insertSolrDocument(currentSolrDocument, "folderA");
 				// Optional Function - Write the document to Solr
 				if (AppProp.writeSolrDocumentToSolr) {
 					OutputSolr.writeDocumentToSolr();
