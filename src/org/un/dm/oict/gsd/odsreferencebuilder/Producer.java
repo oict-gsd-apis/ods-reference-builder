@@ -17,17 +17,21 @@ public class Producer implements Runnable {
 	// by the Consumer class
 	BlockingQueue<SolrDocument> processedSolrDocuments;
 	BlockingQueue<ReferenceDocument> processedReferenceDocuments;
+	int solrFilesProduced = 0;
+	int referenceFilesProduced = 0;
 
 	// Constructor accepting blocking queues
-	public Producer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments) {
+	public Producer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments, int solrFilesProduced, int referenceFilesProduced) {
 		// Set the local variables with the ones passed into during instantiation
 		this.processedSolrDocuments = processedSolrDocuments;
 		this.processedReferenceDocuments = processedReferenceDocuments;
+		this.solrFilesProduced = solrFilesProduced;
+		this.referenceFilesProduced = referenceFilesProduced;
 	}
 
 	@Override
 	/**
-	 * 
+	 * Method called on running the thread
 	 */
 	public void run() {
 		// Start the process
@@ -84,6 +88,8 @@ public class Producer implements Runnable {
 		// If required obtain a new body
 		newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
 		processedSolrDocuments.add(newSolrDocument);	
+		solrFilesProduced++;
+		System.out.println("("+ solrFilesProduced +") Solr Document Produced : " + newSolrDocument.getId());
 	}
 	
 	/**
@@ -96,12 +102,7 @@ public class Producer implements Runnable {
 		// TODO Test references, there seems to be a lost of noise, code below shows output
 		newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
 		processedReferenceDocuments.add(newReferenceDocument);
-		
-		String refs = "[";
-		for(String s : newReferenceDocument.getReferences()) {
-			refs += "{" + s + "},";
-		}
-		refs += "]";
-		System.out.println("Id : " + newReferenceDocument.getId() + " refs: " + refs);
+		referenceFilesProduced++;
+		System.out.println("(" + referenceFilesProduced + ")Reference Document Produced : " + newReferenceDocument.getId());
 	}
 }

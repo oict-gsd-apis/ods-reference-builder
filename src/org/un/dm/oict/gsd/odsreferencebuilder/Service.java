@@ -17,6 +17,10 @@ public class Service {
 	// Two blocking queues for storing the processed files and consuming them
 	static BlockingQueue<SolrDocument> processedSolrDocuments;
 	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
+	static int solrFilesConsumed = 0;
+	static int referenceFilesConsumed = 0;
+	static int solrFilesProduced = 0;
+	static int referenceFilesProduced = 0;
 	
 	/**
 	 * Entry point to application, sets variables, initializes the logs
@@ -34,9 +38,9 @@ public class Service {
 		
 		try { 	
 			// Start the Producer and Consumer on individual threads
-			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments);
+			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
 	        new Thread(producer).start();
-	        Consumer consumer = new Consumer(processedSolrDocuments, processedReferenceDocuments);
+	        Consumer consumer = new Consumer(processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
 	        new Thread(consumer).start();
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());

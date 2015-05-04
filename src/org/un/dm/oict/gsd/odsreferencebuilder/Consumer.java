@@ -16,17 +16,21 @@ public class Consumer implements Runnable {
 	// by the Consumer class
 	BlockingQueue<SolrDocument> processedSolrDocuments;
 	BlockingQueue<ReferenceDocument> processedReferenceDocuments;
+	int solrFilesConsumed = 0;
+	int referenceFilesConsumed = 0;
 
 	// Constructor accepting blocking queues
-	public Consumer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments) {
+	public Consumer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments, int solrFilesConsumed, int referenceFilesConsumed) {
 		// Set the local variables with the ones passed into during instantiation
 		this.processedSolrDocuments = processedSolrDocuments;
 		this.processedReferenceDocuments = processedReferenceDocuments;
+		this.solrFilesConsumed = solrFilesConsumed;
+		this.referenceFilesConsumed = referenceFilesConsumed;
 	}
 
 	@Override
 	/**
-	 * 
+	 * Method called on running the thread
 	 */
 	public void run() {
 		try {
@@ -58,8 +62,11 @@ public class Consumer implements Runnable {
 				// Write out newly created Solr Document
 				OutputFile of = new OutputFile();
 				of.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
+				solrFilesConsumed++;
+				System.out.println("(" + solrFilesConsumed + ") Solr Document Consumed : " + currentSolrDocument.getId());
+				
 				// Store in Database
-				AppProp.database.insertSolrDocument(currentSolrDocument, "folderA");
+				//AppProp.database.insertSolrDocument(currentSolrDocument, "folderA");
 				// Optional Function - Write the document to Solr
 				if (AppProp.writeSolrDocumentToSolr) {
 					OutputSolr.writeDocumentToSolr();
@@ -80,6 +87,9 @@ public class Consumer implements Runnable {
 				// Write out newly created Reference Document
 				OutputFile of = new OutputFile();
 				of.writeReferenceDocument(currentReferenceDocument.buildNewFilename(), currentReferenceDocument.toString());
+				referenceFilesConsumed++;
+				System.out.println("(" + referenceFilesConsumed + ") Reference Document Consumed : " + currentReferenceDocument.getId());
+				
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
