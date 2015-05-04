@@ -23,8 +23,13 @@ public class AppProp {
 	
 	static String databaseLocation = "";
 	static String databaseName = "";
+	static String databasePort = "";
 	static String databaseUsername = "";
 	static String databasePassword = "";
+	static String databaseDocumentTable = "";
+	static String databaseReferenceTable = "";
+	static String databaseWarningTable = "";
+	static String databaseErrorTable = "";
 	
 	static String tikaTesseractServer = "";
 	static String referenceRegex = "";
