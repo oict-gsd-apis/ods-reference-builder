@@ -26,9 +26,12 @@ public class Producer implements Runnable {
 	}
 
 	@Override
+	/**
+	 * 
+	 */
 	public void run() {
 		// Start the process
-		performTask(AppProp.rootFileDirectory);	
+		iterateFiles(AppProp.rootFileDirectory);	
 	}
 	
 	/**
@@ -37,7 +40,7 @@ public class Producer implements Runnable {
 	 * and writes the output to an individual file
 	 * @param xmlFilesDirectory
 	 */
-	void performTask(String rootFileDirectory) {
+	private void iterateFiles(String rootFileDirectory) {
 		// Set file directory for XML files
 		File dir = new File(rootFileDirectory);
 		File[] directoryListing = dir.listFiles();
@@ -47,7 +50,7 @@ public class Producer implements Runnable {
 			for (File child : directoryListing) {
 				// Recurse through this directory
 				if (child.isDirectory()) {
-					performTask(child.getAbsolutePath());
+					iterateFiles(child.getAbsolutePath());
 				} else {
 					// Get current filename
 					String currXmlFilename = child.getAbsolutePath();
@@ -63,25 +66,42 @@ public class Producer implements Runnable {
 						currentSolrDocument.setFilename(currXmlFilename);
 						newSolrDocument.setFilename(currXmlFilename);
 	
-						// Process the Solr Document - Cleanse & apply business logic
-						// If required obtain a new body
-						newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
-						processedSolrDocuments.add(newSolrDocument);
-		
-						// Extract references for all Symbol variations
-						// TODO Test references, there seems to be a lost of noise, code below shows output
-						newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
-						processedReferenceDocuments.add(newReferenceDocument);
-						
-						String refs = "[";
-						for(String s : newReferenceDocument.getReferences()) {
-							refs += "{" + s + "},";
-						}
-						refs += "]";
-						System.out.println("Id : " + newReferenceDocument.getId() + " refs: " + refs);
+						processSolrDocuments(currentSolrDocument, newSolrDocument);
+						processReferenceDocuments(newSolrDocument, newReferenceDocument);
 					}
 				}
 			}
 		}		
+	}
+	
+	/**
+	 * 
+	 * @param currentSolrDocument
+	 * @param newSolrDocument
+	 */
+	private void processSolrDocuments(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) {
+		// Process the Solr Document - Cleanse & apply business logic
+		// If required obtain a new body
+		newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
+		processedSolrDocuments.add(newSolrDocument);	
+	}
+	
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @param newReferenceDocument
+	 */
+	private void processReferenceDocuments(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) {
+		// Extract references for all Symbol variations
+		// TODO Test references, there seems to be a lost of noise, code below shows output
+		newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
+		processedReferenceDocuments.add(newReferenceDocument);
+		
+		String refs = "[";
+		for(String s : newReferenceDocument.getReferences()) {
+			refs += "{" + s + "},";
+		}
+		refs += "]";
+		System.out.println("Id : " + newReferenceDocument.getId() + " refs: " + refs);
 	}
 }

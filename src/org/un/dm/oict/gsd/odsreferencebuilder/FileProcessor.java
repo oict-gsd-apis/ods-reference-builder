@@ -39,7 +39,46 @@ public class FileProcessor {
 	 */
 	static SolrDocument extractMapData(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) { 
 		newSolrDocument.setId( currentSolrDocument.getId() );
+		newSolrDocument.setSymbol( currentSolrDocument.getSymbol() );
+		newSolrDocument.setLanguageCode( currentSolrDocument.getLanguageCode() );
+		newSolrDocument.setSymbol2( currentSolrDocument.getSymbol2() );
+		newSolrDocument.setSymbol3( currentSolrDocument.getSymbol3() );
+		newSolrDocument.setAgenda1( currentSolrDocument.getAgenda1() );
+		newSolrDocument.setAgenda2( currentSolrDocument.getAgenda2() );
+		newSolrDocument.setAgenda3( currentSolrDocument.getAgenda3() );
+		newSolrDocument.setSession1( currentSolrDocument.getSession1() );
+		newSolrDocument.setSession2( currentSolrDocument.getSession2() );
+		newSolrDocument.setSession3( currentSolrDocument.getSession3() );
+		newSolrDocument.setAlternativeSymbols( currentSolrDocument.getAlternativeSymbols() );
+		newSolrDocument.setTitle( currentSolrDocument.getTitle() );
+		newSolrDocument.setDocType( currentSolrDocument.getDocType() );
+		newSolrDocument.setSize( currentSolrDocument.getSize() );
+		newSolrDocument.setUrlJob( currentSolrDocument.getUrlJob() );
+		newSolrDocument.setSubjects( currentSolrDocument.getSubjects() );
+		newSolrDocument.setPublicationDate( currentSolrDocument.getPublicationDate() );
+		newSolrDocument.setUrl( currentSolrDocument.getUrl() );
+		newSolrDocument.setPdfContentLength( currentSolrDocument.getPdfContentLength() );
+		newSolrDocument.setPdfContentType( currentSolrDocument.getPdfContentType() );
+		newSolrDocument.setPdfCreationDate( currentSolrDocument.getPdfCreationDate() );
+		newSolrDocument.setPdfLastModified( currentSolrDocument.getPdfLastModified() );
+		newSolrDocument.setPdfLastSaveDate( currentSolrDocument.getPdfLastSaveDate() );
+		newSolrDocument.setPdfCreated( currentSolrDocument.getPdfCreated() );
+		newSolrDocument.setPdfDate( currentSolrDocument.getPdfDate() );
+		newSolrDocument.setPdfDCTermsCreated( currentSolrDocument.getPdfDCTermsCreated() );
+		newSolrDocument.setPdfDCTermsModified( currentSolrDocument.getPdfDCTermsModified() );
+		newSolrDocument.setPdfMetaCreationDate( currentSolrDocument.getPdfMetaCreationDate() );
+		newSolrDocument.setPdfMetaSaveDate( currentSolrDocument.getPdfMetaSaveDate() );
+		newSolrDocument.setPdfModified( currentSolrDocument.getPdfModified() );
+		newSolrDocument.setPdfProducer( currentSolrDocument.getPdfProducer() );
+		newSolrDocument.setPdfXMPCreatorTool( currentSolrDocument.getPdfXMPCreatorTool() );
+		newSolrDocument.setPdfXMPTpgNPages( currentSolrDocument.getPdfXMPTpgNPages() );
+		newSolrDocument.setDateCreated( currentSolrDocument.getDateCreated() );
+	
+		//protected Map<String, String> sessions;
+		//protected Map<String, String> agendas;
+	    
 		newSolrDocument.setBody( currentSolrDocument.getBody() );
+
 		return newSolrDocument;
 	}
 

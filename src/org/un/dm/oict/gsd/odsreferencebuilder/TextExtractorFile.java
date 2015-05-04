@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 public class TextExtractorFile {
 	
 	/**
-	 * 
+	 * This method reads an XML document then calls the mapper function
 	 * @param currXmlFilename
 	 * @return
 	 */
@@ -51,6 +51,41 @@ public class TextExtractorFile {
 	    currentSolrDocument.setId( getXmlElement(doc, "id") );
 	    currentSolrDocument.setSymbol( getXmlElement(doc, "symbol") );
 	    currentSolrDocument.setLanguageCode( getXmlElement(doc, "languageCode") );
+	    currentSolrDocument.setSymbol2( getXmlElement(doc, "symbol2") );
+	    currentSolrDocument.setSymbol3( getXmlElement(doc, "symbol3") );
+		currentSolrDocument.setAgenda1( getXmlElement(doc, "agenda1") );
+		currentSolrDocument.setAgenda2( getXmlElement(doc, "agenda2") );
+		currentSolrDocument.setAgenda3( getXmlElement(doc, "agenda3") );
+		currentSolrDocument.setSession1( getXmlElement(doc, "session1") );
+		currentSolrDocument.setSession2( getXmlElement(doc, "session2") );
+		currentSolrDocument.setSession3( getXmlElement(doc, "session3") );
+		currentSolrDocument.setAlternativeSymbols( getXmlElement(doc, "alternativeSymbols") );
+		currentSolrDocument.setTitle( getXmlElement(doc, "title") );
+		currentSolrDocument.setDocType( getXmlElement(doc, "docType") );
+		currentSolrDocument.setSize( getXmlElement(doc, "size") );
+		currentSolrDocument.setUrlJob( getXmlElement(doc, "urlJob") );
+		currentSolrDocument.setSubjects( getXmlElement(doc, "subjects") );
+		currentSolrDocument.setPublicationDate( getXmlElement(doc, "publicationDate") );
+		currentSolrDocument.setUrl( getXmlElement(doc, "url") );
+		currentSolrDocument.setPdfContentLength( getXmlElement(doc, "pdfContentLength") );
+		currentSolrDocument.setPdfContentType( getXmlElement(doc, "pdfContentType") );
+		currentSolrDocument.setPdfCreationDate( getXmlElement(doc, "pdfCreationDate") );
+		currentSolrDocument.setPdfLastModified( getXmlElement(doc, "pdfLastModified") );
+		currentSolrDocument.setPdfLastSaveDate( getXmlElement(doc, "pdfLastSaveDate") );
+		currentSolrDocument.setPdfCreated( getXmlElement(doc, "pdfCreated") );
+		currentSolrDocument.setPdfDate( getXmlElement(doc, "pdfDate") );
+		currentSolrDocument.setPdfDCTermsCreated( getXmlElement(doc, "pdfDCTermsCreated") );
+		currentSolrDocument.setPdfDCTermsModified( getXmlElement(doc, "pdfDCTermsModified") );
+		currentSolrDocument.setPdfMetaCreationDate( getXmlElement(doc, "pdfMetaCreationDate") );
+		currentSolrDocument.setPdfMetaSaveDate( getXmlElement(doc, "pdfMetaSaveDate") );
+		currentSolrDocument.setPdfModified( getXmlElement(doc, "pdfModified") );
+		currentSolrDocument.setPdfProducer( getXmlElement(doc, "pdfProducer") );
+		currentSolrDocument.setPdfXMPCreatorTool( getXmlElement(doc, "pdfXMPCreatorTool") );
+		currentSolrDocument.setPdfXMPTpgNPages( getXmlElement(doc, "pdfXMPTpgNPages") );
+		currentSolrDocument.setDateCreated( getXmlElement(doc, "dateCreated") );
+	
+		//protected Map<String, String> sessions;
+		//protected Map<String, String> agendas;
 	    
 	    if (currentSolrDocument.getLanguageCode().equals("en"))
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_en") );
@@ -70,7 +105,7 @@ public class TextExtractorFile {
 	}
 	
 	/**
-	 * 
+	 * This method gets a specific xml element based on a Solr Schema
 	 * @param doc
 	 * @param fieldName
 	 * @return
