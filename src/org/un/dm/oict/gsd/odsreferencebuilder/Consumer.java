@@ -32,7 +32,7 @@ public class Consumer implements Runnable {
 		try {
 			// Sleep 30 seconds, allowing enough time for both
 			// blocking queues to have an initial document
-			Thread.sleep(300 * 1000);
+			Thread.sleep(3 * 1000);
 		} catch (InterruptedException e) {
 			System.out.println("ERROR: " + e.getMessage());
 		}
@@ -56,7 +56,8 @@ public class Consumer implements Runnable {
     	try {
 			while ((currentSolrDocument = processedSolrDocuments.poll(AppProp.pollDuration, TimeUnit.MINUTES)) != null) {
 				// Write out newly created Solr Document
-				OutputFile.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
+				OutputFile of = new OutputFile();
+				of.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
 				// Store in Database
 				//OutputDatabase.logData();
 				// Optional Function - Write the document to Solr
@@ -77,7 +78,8 @@ public class Consumer implements Runnable {
     	try {
 			while ((currentReferenceDocument = processedReferenceDocuments.poll(AppProp.pollDuration, TimeUnit.MINUTES)) != null) {
 				// Write out newly created Reference Document
-				OutputFile.writeReferenceDocument(currentReferenceDocument.buildNewFilename(), currentReferenceDocument.toString());
+				OutputFile of = new OutputFile();
+				of.writeReferenceDocument(currentReferenceDocument.buildNewFilename(), currentReferenceDocument.toString());
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
