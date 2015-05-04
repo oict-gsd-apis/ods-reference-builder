@@ -32,6 +32,24 @@ public class Service {
 		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
 		
 		// Initialize the config file, log file and set the variables
+		initializeVariables();
+		
+		try { 			
+			// Start the Producer and Consumer on individual threads
+			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments);
+	        new Thread(producer).start();
+	        Consumer consumer = new Consumer(processedSolrDocuments, processedReferenceDocuments);
+	        new Thread(consumer).start();
+		} catch (Exception e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * This method is used to initialize the variables and logger
+	 */
+	static void initializeVariables() {
+		// Initialize the config file, log file and set the variables
 		Helper.initialiseConfigFile();
 		AppProp.log = Logger.getLogger(Service.class);
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
@@ -47,15 +65,5 @@ public class Service {
 		AppProp.referenceRegex = Helper.getProperty("referenceRegex");
 		AppProp.pollDuration = Integer.parseInt(Helper.getProperty("pollDuration"));
 		AppProp.writeSolrDocumentToSolr = Boolean.parseBoolean(Helper.getProperty("writeSolrDocumentToSolr"));
-		
-		try { 			
-			// Start the Producer and Consumer on individual threads
-			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments);
-	        new Thread(producer).start();
-	        Consumer consumer = new Consumer(processedSolrDocuments, processedReferenceDocuments);
-	        new Thread(consumer).start();
-		} catch (Exception e) {
-			System.out.println("ERROR: " + e.getMessage());
-		}
 	}
 }

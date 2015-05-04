@@ -60,7 +60,7 @@ public class Consumer implements Runnable {
 	    	try {
 				while ((currentReferenceDocument = processedReferenceDocuments.poll(AppProp.pollDuration, TimeUnit.MINUTES)) != null) {
 					// Write out newly created Reference Document
-					OutputFile.writeReferenceDocument("filename", currentReferenceDocument.toString());
+					OutputFile.writeReferenceDocument(currentReferenceDocument.buildNewFilename(), currentReferenceDocument.toString());
 				}
 			} catch (Exception e) {
 				System.out.println("ERROR: " + e.getMessage());

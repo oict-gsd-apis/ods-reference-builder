@@ -22,6 +22,8 @@ public class ReferenceDocument {
 	// Multi-valued Solr Field
 	protected List<String> references;
 	
+	protected String filename;
+	
 	/**
 	 * 
 	 */
@@ -47,6 +49,10 @@ public class ReferenceDocument {
 			xml += "</add>\n";
 		xml += "</doc>";
 		return xml;
+	}
+	
+	public String buildNewFilename() {
+		return this.filename;
 	}
 	
 	public String getId() {
@@ -99,5 +105,11 @@ public class ReferenceDocument {
 	}
 	public void addReference(String reference) {
 		this.references.add(reference);
+	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 }
