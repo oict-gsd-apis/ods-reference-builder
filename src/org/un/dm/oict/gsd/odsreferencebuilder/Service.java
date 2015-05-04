@@ -45,6 +45,8 @@ public class Service {
 		AppProp.databasePassword = Helper.getProperty("databasePassword");
 		AppProp.tikaTesseractServer = Helper.getProperty("tikaTesseractServer");
 		AppProp.referenceRegex = Helper.getProperty("referenceRegex");
+		AppProp.pollDuration = Integer.parseInt(Helper.getProperty("pollDuration"));
+		AppProp.writeSolrDocumentToSolr = Boolean.parseBoolean(Helper.getProperty("writeSolrDocumentToSolr"));
 		
 		try { 			
 			// Start the Producer and Consumer on individual threads

@@ -1,5 +1,9 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -47,4 +51,18 @@ public class Helper {
 		}
     	return configFile;
     }
+    
+	static Timestamp getTimestamp(String sdate){
+		if (sdate == null || sdate.equals(""))
+			sdate = "1900-01-01T00:00:00Z";
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		Date date = null;
+		try {
+			date = dateFormat.parse(sdate);
+		} catch (Exception e) {
+			System.out.println("ERROR: " + e.getMessage());		
+		}
+		long time = date.getTime();
+		return new Timestamp(time);
+	}
 }
