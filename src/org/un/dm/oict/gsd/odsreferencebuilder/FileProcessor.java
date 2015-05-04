@@ -240,8 +240,10 @@ public class FileProcessor {
 		String body = newSolrDocument.getBody();
 		boolean found = false;
 		for(char c : invalidChars) {
-			if (body.contains(Character.toString(c)))
+			if (body.contains(Character.toString(c))){
 				found =  true;
+				break; //once one of the characters is found breaks the loop 
+			}
 		}
 		return found;
 	}

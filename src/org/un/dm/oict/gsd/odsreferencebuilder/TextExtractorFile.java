@@ -127,4 +127,3 @@ public class TextExtractorFile {
 	 */
 	static void obtainText() {}
 }
-//test Daniel

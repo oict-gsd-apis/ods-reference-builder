@@ -60,8 +60,19 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param folder
 	 * @return
 	 */
-	public boolean insertSolrDocument(SolrDocument newSolrDocument, String folder) {
-		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), folder, newSolrDocument.getFilename());
+	public boolean insertSolrDocument(SolrDocument newSolrDocument) {
+		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), newSolrDocument.getFilename().substring(0,newSolrDocument.getFilename().lastIndexOf("/")+1), newSolrDocument.getFilename().substring(newSolrDocument.getFilename().lastIndexOf("/")+1, newSolrDocument.getFilename().length()));
+	}
+	
+	@Override
+	/**
+	 * This is an abstraction method used to insert a SolrDocument
+	 * @param newSolrDocument
+	 * @param folder
+	 * @return
+	 */
+	public boolean insertReferenceDocument(SolrDocument newSolrDocument) {
+		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), newSolrDocument.getFilename().substring(0,newSolrDocument.getFilename().lastIndexOf("/")+1), newSolrDocument.getFilename().substring(newSolrDocument.getFilename().lastIndexOf("/")+1, newSolrDocument.getFilename().length()));
 	}
 	
 	// TODO Reference method insertReferenceDocument

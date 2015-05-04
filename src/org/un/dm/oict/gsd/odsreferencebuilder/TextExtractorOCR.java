@@ -46,7 +46,7 @@ public class TextExtractorOCR {
 		// Construct the cURL command
 		String[] command = { "curl",
 	            			"-T",
-	            			pdfUrl,
+	            			pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/" + pdfUrl,
 	            			"http://frankie:9998/tika",
 	            			"--header",
 	            			"\"Accept: text/plain\""};

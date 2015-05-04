@@ -21,5 +21,7 @@ public abstract class OutputDatabase {
 	
 	abstract void runQuery(String query, Map<Integer, Object> params);
 	
-	abstract boolean insertSolrDocument(SolrDocument newSolrDocument, String folder);
+	abstract boolean insertSolrDocument(SolrDocument newSolrDocument);
+	
+	abstract boolean insertReferenceDocument(SolrDocument newSolrDocument);
 }
