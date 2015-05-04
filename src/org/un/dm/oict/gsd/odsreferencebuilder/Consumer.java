@@ -12,11 +12,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class Consumer implements Runnable {
 
+	// Create two BlockingQueue variables to store the documents for processing
+	// by the Consumer class
 	BlockingQueue<SolrDocument> processedSolrDocuments;
 	BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 
+	// Constructor accepting blocking queues
 	public Consumer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments) {
-		
+		// Set the local variables with the ones passed into during instantiation
 		this.processedSolrDocuments = processedSolrDocuments;
 		this.processedReferenceDocuments = processedReferenceDocuments;
 	}
@@ -31,12 +34,13 @@ public class Consumer implements Runnable {
 			System.out.println("ERROR: " + e.getMessage());
 		}
 		 
+		// Process Solr Documents
     	if (processedSolrDocuments.size() > 0) {
 	    	SolrDocument currentSolrDocument = null;
 	    	try {
 				while ((currentSolrDocument = processedSolrDocuments.poll(AppProp.pollDuration, TimeUnit.MINUTES)) != null) {
 					// Write out newly created Solr Document
-					OutputFile.writeSolrDocument("filename", currentSolrDocument.toString());
+					OutputFile.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
 					// Store in Database
 					//OutputDatabase.logData();
 					// Optional Function - Write the document to Solr
@@ -50,6 +54,7 @@ public class Consumer implements Runnable {
  		
     	} 
     	
+    	// Process Reference Documents
     	if (processedReferenceDocuments.size() > 0) {
 	    	ReferenceDocument currentReferenceDocument = null;
 	    	try {

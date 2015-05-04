@@ -58,6 +58,10 @@ public class Producer implements Runnable {
 						SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
 						SolrDocument newSolrDocument = new SolrDocument();
 						ReferenceDocument newReferenceDocument = new ReferenceDocument();
+						
+						// Set both the currentSolrDocument and newSolrDocuments filename to be the same
+						currentSolrDocument.setFilename(currXmlFilename);
+						newSolrDocument.setFilename(currXmlFilename);
 	
 						// Process the Solr Document - Cleanse & apply business logic
 						// If required obtain a new body

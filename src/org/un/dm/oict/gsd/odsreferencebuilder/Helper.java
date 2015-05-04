@@ -17,7 +17,7 @@ import java.util.Properties;
 public class Helper {
 	
 	/**
-	 * 
+	 * This method obtains a particular property from the config.properties file
 	 * @param name
 	 * @return
 	 */
@@ -26,7 +26,7 @@ public class Helper {
 	}
 	
 	/**
-	 * 
+	 * This method initializes the config file storing this value in the AppProp
 	 */
 	static void initialiseConfigFile(){
 		try {
@@ -37,7 +37,7 @@ public class Helper {
 	}
 	
 	/**
-	 * 
+	 * This method is used to load the actual config file based on its name
 	 * @param loader
 	 * @return
 	 * @throws Exception
@@ -52,6 +52,11 @@ public class Helper {
     	return configFile;
     }
     
+    /**
+     * This method is used to obtain a Unix timestamp for a given date format
+     * @param sdate
+     * @return
+     */
 	static Timestamp getTimestamp(String sdate){
 		if (sdate == null || sdate.equals(""))
 			sdate = "1900-01-01T00:00:00Z";

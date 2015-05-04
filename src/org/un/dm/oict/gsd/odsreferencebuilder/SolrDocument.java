@@ -51,6 +51,8 @@ public class SolrDocument {
 	protected String pdfXMPTpgNPages;
 	protected String dateCreated;
 	
+	protected String filename;
+	
 	protected boolean requiresNewBody;
 	
 	/**
@@ -77,6 +79,10 @@ public class SolrDocument {
 			xml += "</add>\n";
 		xml += "</doc>";
 		return xml;
+	}
+	
+	public String buildNewFilename() {
+		return this.filename;
 	}
 
 	public String getId() {
@@ -389,5 +395,13 @@ public class SolrDocument {
 
 	public void setRequiresNewBody(boolean requiresNewBody) {
 		this.requiresNewBody = requiresNewBody;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 }
