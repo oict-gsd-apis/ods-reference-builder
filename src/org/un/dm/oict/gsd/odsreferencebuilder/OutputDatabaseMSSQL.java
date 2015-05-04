@@ -71,7 +71,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 */
 	public boolean insertDocument(String documentType, String documentId, String documentSymbol, String language, String title, String folder, String fileName) {
 		try {			    
-		    String qry = "INSERT INTO \""+ (documentType == "Document"?  AppProp.databaseDocumentTable : AppProp.databaseReferenceTable) + "\" (\"DocumentId\", \"DocumentSymbol\", \"Language\", \"Title\", \"Folder\", \"Filename\") VALUES(?, ?, ?, ?, ?, ?)";
+		    String qry = "INSERT INTO "+ (documentType == "Document"?  AppProp.databaseDocumentTable : AppProp.databaseReferenceTable) + " (\"DocumentId\", \"DocumentSymbol\", \"Language\", \"Title\", \"Folder\", \"Filename\") VALUES(?, ?, ?, ?, ?, ?)";
 		    Map<Integer, Object> params = new HashMap<Integer, Object>();
 		    params.put(1, documentId);
 		    params.put(2, documentSymbol);
