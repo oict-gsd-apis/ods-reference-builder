@@ -64,6 +64,8 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), folder, newSolrDocument.getFilename());
 	}
 	
+	// TODO Reference method insertReferenceDocument
+	
 	@Override
 	/**
 	 * This method builds the query string, assigning parameters and calling the runQuery method
@@ -96,6 +98,9 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 			return false;
 		}
 	}
+	
+	// TODO Warning method
+	// TODO Error method
 	
 	@Override
 	/**
