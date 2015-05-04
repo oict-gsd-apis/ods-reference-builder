@@ -8,13 +8,20 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Kevin Thomas Bradley & Daniel Buenavad
+ * @dateCreated 4-May-2015
+ * @description This class is used as a connector to MSSQL DB
+ * @version 1.0
+ * @codeReviewer
+ */
 public class OutputDatabaseMSSQL extends OutputDatabase {
 	 
 	private Connection connection = null; 
 	
 	@Override
 	/**
-	 * 
+	 * This method is used to identify is a connection exists
 	 * @return
 	 */
 	public boolean isConnected() {
@@ -31,7 +38,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 
 	@Override
 	/**
-	 * 
+	 * This method is used to establish a connection based on variables set in the config file
 	 */
 	public void establishConnection() {
 		
@@ -48,7 +55,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	
 	@Override
 	/**
-	 * 
+	 * This is an abstraction method used to insert a SolrDocument
 	 * @param newSolrDocument
 	 * @param folder
 	 * @return
@@ -59,7 +66,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	
 	@Override
 	/**
-	 * 
+	 * This method builds the query string, assigning parameters and calling the runQuery method
 	 * @param documentType
 	 * @param documentId
 	 * @param documentSymbol
@@ -92,7 +99,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	
 	@Override
 	/**
-	 * 
+	 * This method like insertDocument is used to build the query string, assigning parameters and calling runQuery
 	 */
 	public boolean insertProblem(String problemType, String documentId, String text) {
 		try {			    
@@ -112,7 +119,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	
 	@Override
 	/**
-	 * 
+	 * This is the actual method which makes the query call to the database
 	 * @param query
 	 * @param params
 	 */
