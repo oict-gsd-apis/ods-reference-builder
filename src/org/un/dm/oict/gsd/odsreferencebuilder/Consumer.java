@@ -66,7 +66,7 @@ public class Consumer implements Runnable {
 				System.out.println("(" + solrFilesConsumed + ") Solr Document Consumed : " + currentSolrDocument.getId());
 				
 				// Store in Database
-				//AppProp.database.insertSolrDocument(currentSolrDocument, "folderA");
+				AppProp.database.insertSolrDocument(currentSolrDocument, "folderA");
 				// Optional Function - Write the document to Solr
 				if (AppProp.writeSolrDocumentToSolr) {
 					OutputSolr.writeDocumentToSolr();
@@ -89,7 +89,6 @@ public class Consumer implements Runnable {
 				of.writeReferenceDocument(currentReferenceDocument.buildNewFilename(), currentReferenceDocument.toString());
 				referenceFilesConsumed++;
 				System.out.println("(" + referenceFilesConsumed + ") Reference Document Consumed : " + currentReferenceDocument.getId());
-				
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
