@@ -11,6 +11,11 @@ import java.util.concurrent.TimeUnit;
  * @codeReviewer
  */
 public class Consumer implements Runnable {
+	
+	public enum ConsumerRunType {
+		Solr,
+		Reference
+	}
 
 	// Create two BlockingQueue variables to store the documents for processing
 	// by the Consumer class
@@ -18,14 +23,16 @@ public class Consumer implements Runnable {
 	BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 	int solrFilesConsumed = 0;
 	int referenceFilesConsumed = 0;
+	ConsumerRunType runType;
 
 	// Constructor accepting blocking queues
-	public Consumer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments, int solrFilesConsumed, int referenceFilesConsumed) {
+	public Consumer(ConsumerRunType runType, BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments, int solrFilesConsumed, int referenceFilesConsumed) {
 		// Set the local variables with the ones passed into during instantiation
 		this.processedSolrDocuments = processedSolrDocuments;
 		this.processedReferenceDocuments = processedReferenceDocuments;
 		this.solrFilesConsumed = solrFilesConsumed;
 		this.referenceFilesConsumed = referenceFilesConsumed;
+		this.runType = runType;
 	}
 
 	@Override
@@ -34,22 +41,26 @@ public class Consumer implements Runnable {
 	 */
 	public void run() {
 		try {
-			// Sleep 30 seconds, allowing enough time for both
+			// Sleep X seconds, allowing enough time for both
 			// blocking queues to have an initial document
 			Thread.sleep(3 * 1000);
 		} catch (InterruptedException e) {
 			System.out.println("ERROR: " + e.getMessage());
 		}
-		 
-		// Process Solr Documents
-    	if (processedSolrDocuments.size() > 0) {
-    		processSolrDocuments();
-    	} 
+		
+		if (runType.equals(ConsumerRunType.Solr)) { 
+			// Process Solr Documents
+	    	if (processedSolrDocuments.size() > 0) {
+	    		processSolrDocuments();
+	    	} 
+		}
     	
-    	// Process Reference Documents
-    	if (processedReferenceDocuments.size() > 0) {
-    		processReferenceDocuments();
-    	} 
+		if (runType.equals(ConsumerRunType.Reference)) {
+	    	// Process Reference Documents
+	    	if (processedReferenceDocuments.size() > 0) {
+	    		processReferenceDocuments();
+	    	} 
+		}
 	}
 	
 	/**

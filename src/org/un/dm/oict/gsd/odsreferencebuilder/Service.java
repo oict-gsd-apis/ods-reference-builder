@@ -4,6 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
+import org.un.dm.oict.gsd.odsreferencebuilder.Consumer.ConsumerRunType;
 
 /**
  * @author Kevin Thomas Bradley
@@ -40,8 +41,10 @@ public class Service {
 			// Start the Producer and Consumer on individual threads
 			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
 	        new Thread(producer).start();
-	        Consumer consumer = new Consumer(processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
-	        new Thread(consumer).start();
+	        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
+	        new Thread(solrConsumer).start();
+	        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
+	        new Thread(referenceConsumer).start();
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
 		}
