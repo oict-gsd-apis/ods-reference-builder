@@ -46,6 +46,7 @@ public class Service {
 	        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
 	        new Thread(referenceConsumer).start();
 		} catch (Exception e) {
+			// TODO Kevin log/error generic method
 			System.out.println("ERROR: " + e.getMessage());
 		}
 		//AppProp.tempTesseractImgOutputDir = "dir";
