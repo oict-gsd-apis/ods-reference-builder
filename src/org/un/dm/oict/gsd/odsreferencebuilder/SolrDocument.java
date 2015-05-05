@@ -57,7 +57,7 @@ public class SolrDocument {
 	 * used to populate the Solr index
 	 */
 	public String toString() {
-		String xml = "";
+		String xml = ""; 
 		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 		xml += "<add>\n";
 			xml += "<doc>\n";
