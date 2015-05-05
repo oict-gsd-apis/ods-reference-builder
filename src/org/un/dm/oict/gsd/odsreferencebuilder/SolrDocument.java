@@ -14,8 +14,6 @@ public class SolrDocument {
 	
 	private String id;
 	private String symbol;
-	private String symbol2;
-	private String symbol3;
 	private String agenda1;
 	private String agenda2;
 	private String agenda3;
@@ -26,8 +24,6 @@ public class SolrDocument {
 	private String title;
 	private String docType;
 	private String size;
-	private Map<String, String> sessions;
-	private Map<String, String> agendas;
 	private String urlJob;
 	private String subjects;
 	private String publicationDate;
@@ -55,14 +51,6 @@ public class SolrDocument {
 	
 	private boolean requiresNewBody;
 	
-	/**
-	 * 
-	 */
-	public SolrDocument() {
-		this.sessions = new HashMap<String, String>();
-		this.agendas = new HashMap<String, String>();
-	}
-	
 	@Override
 	/**
 	 * This overridden method is used to construct the Solr XML for the document
@@ -75,9 +63,40 @@ public class SolrDocument {
 			xml += "<doc>\n";
 				xml += "<field name=\"id\">" + this.id + "</field>\n";
 				xml += "<field name=\"symbol\">" + this.symbol + "</field>\n";
+				xml += "<field name=\"agenda1\">" + this.agenda1 + "</field>\n";
+				xml += "<field name=\"agenda2\">" + this.agenda2 + "</field>\n";
+				xml += "<field name=\"agenda3\">" + this.agenda3 + "</field>\n";
+				xml += "<field name=\"session1\">" + this.session1 + "</field>\n";
+				xml += "<field name=\"session2\">" + this.session2 + "</field>\n";
+				xml += "<field name=\"session3\">" + this.session3 + "</field>\n";
+				xml += "<field name=\"alternativeSymbols\">" + this.alternativeSymbols + "</field>\n";
+				xml += "<field name=\"title\">" + this.title + "</field>\n";
+				xml += "<field name=\"docType\">" + this.docType + "</field>\n";
+				xml += "<field name=\"size\">" + this.size + "</field>\n";
+				xml += "<field name=\"urlJob\">" + this.urlJob + "</field>\n";
+				xml += "<field name=\"subjects\">" + this.subjects + "</field>\n";
+				xml += "<field name=\"publicationDate\">" + this.publicationDate + "</field>\n";
+				xml += "<field name=\"url\"><![CDATA[" + this.url + "]]></field>\n";
+				xml += "<field name=\"languageCode\">" + this.languageCode + "</field>\n";
+				xml += "<field name=\"pdfContentLength\">" + this.pdfContentLength + "</field>\n";
+				xml += "<field name=\"pdfContentType\">" + this.pdfContentType + "</field>\n";
+				xml += "<field name=\"pdfCreationDate\">" + this.pdfCreationDate + "</field>\n";
+				xml += "<field name=\"pdfLastModified\">" + this.pdfLastModified + "</field>\n";
+				xml += "<field name=\"pdfLastSaveDate\">" + this.pdfLastSaveDate + "</field>\n";
+				xml += "<field name=\"pdfCreated\">" + this.pdfCreated + "</field>\n";
+				xml += "<field name=\"pdfDate\">" + this.pdfDate + "</field>\n";
+				xml += "<field name=\"pdfDCTermsCreated\">" + this.pdfDCTermsCreated + "</field>\n";
+				xml += "<field name=\"pdfDCTermsModified\">" + this.pdfDCTermsModified + "</field>\n";
+				xml += "<field name=\"pdfMetaCreationDate\">" + this.pdfMetaCreationDate + "</field>\n";
+				xml += "<field name=\"pdfMetaSaveDate\">" + this.pdfMetaSaveDate + "</field>\n";
+				xml += "<field name=\"pdfModified\">" + this.pdfModified + "</field>\n";
+				xml += "<field name=\"pdfProducer\">" + this.pdfProducer + "</field>\n";
+				xml += "<field name=\"pdfXMPCreatorTool\">" + this.pdfXMPCreatorTool + "</field>\n";
+				xml += "<field name=\"pdfXMPTpgNPages\">" + this.pdfXMPTpgNPages + "</field>\n";
+				xml += "<field name=\"dateCreated\">" + this.dateCreated + "</field>\n";
 				xml += "<field name=\"body_" + this.languageCode + "\">" + this.body + "</field>\n";
+				xml += "</doc>";
 			xml += "</add>\n";
-		xml += "</doc>";
 		return xml;
 	}
 	
@@ -100,22 +119,6 @@ public class SolrDocument {
 
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
-	}
-
-	public String getSymbol2() {
-		return symbol2;
-	}
-
-	public void setSymbol2(String symbol2) {
-		this.symbol2 = symbol2;
-	}
-
-	public String getSymbol3() {
-		return symbol3;
-	}
-
-	public void setSymbol3(String symbol3) {
-		this.symbol3 = symbol3;
 	}
 
 	public String getAgenda1() {
@@ -196,22 +199,6 @@ public class SolrDocument {
 
 	public void setSize(String size) {
 		this.size = size;
-	}
-
-	public Map<String, String> getSessions() {
-		return sessions;
-	}
-
-	public void setSessions(Map<String, String> sessions) {
-		this.sessions = sessions;
-	}
-
-	public Map<String, String> getAgendas() {
-		return agendas;
-	}
-
-	public void setAgendas(Map<String, String> agendas) {
-		this.agendas = agendas;
 	}
 
 	public String getUrlJob() {
