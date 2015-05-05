@@ -36,6 +36,7 @@ public class AppProp {
 	static String documentOutputFolder = "";
 	
 	static String tikaTesseractServer = "";
+	static String tempTesseractImgOutputDir = "";
 	static String referenceRegex = "";
 	static int pollDuration = 0;
 	

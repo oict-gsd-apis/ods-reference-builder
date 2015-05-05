@@ -16,6 +16,10 @@ import java.util.UUID;
  * @description This class is used to connect to our Tika/Tesseract Instance (Check One Pager)
  * @version 1.0
  * @codeReviewer
+ * 
+ * Tesseract & Ghostscript should ideally be installed:
+ * sudo apt-get install ghostscript
+ * sudo apt-get install tesseract-ocr tesseract-ocr-eng tesseract-ocr-fre tesseract-ocr-spa tesseract-ocr-ara tesseract-ocr-rus tesseract-ocr-chi_sim
  */
 public class TextExtractorOCR {
 
@@ -123,10 +127,10 @@ public class TextExtractorOCR {
 	 * @param languageCode
 	 * @return
 	 */
-	static String performCompleteOCR(String tempOutputDir, String pdfUrl, String languageCode) {
+	static String performCompleteOCR(String pdfUrl, String languageCode) {
 		String tempId = UUID.randomUUID().toString();
-		String imgFile = tempOutputDir + "" + tempId + ".tif";
-		String txtFile = tempOutputDir + "" + tempId + "";
+		String imgFile = AppProp.tempTesseractImgOutputDir + "" + tempId + ".tif";
+		String txtFile = AppProp.tempTesseractImgOutputDir + "" + tempId + "";
 		String lang = mapLanguageCode(languageCode);
 		// TODO Copy PDF locally
 		// Convert pdf to images in a specific folder
@@ -170,7 +174,7 @@ public class TextExtractorOCR {
 		try {
 			encoded = Files.readAllBytes(Paths.get(path));
 		} catch (IOException e) {
-			
+			System.out.println("ERROR: " + e.getMessage());
 		}
 		return new String(encoded, encoding);
 	}

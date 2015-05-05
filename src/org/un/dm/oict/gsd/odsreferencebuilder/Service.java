@@ -45,7 +45,8 @@ public class Service {
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
 		}
-		//TextExtractorOCR.performCompleteOCR("/home/daniel/Desktop/testFiles/", "/home/daniel/Desktop/G9951054.PDF" , "ar");
+		//AppProp.tempTesseractImgOutputDir = "dir";
+		//TextExtractorOCR.performCompleteOCR("pdfLoc" , "ar");
 	}
 	
 	/**
