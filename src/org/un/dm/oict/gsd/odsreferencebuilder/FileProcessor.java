@@ -38,8 +38,6 @@ public class FileProcessor {
 		newSolrDocument.setId( currentSolrDocument.getId() );
 		newSolrDocument.setSymbol( currentSolrDocument.getSymbol() );
 		newSolrDocument.setLanguageCode( currentSolrDocument.getLanguageCode() );
-		newSolrDocument.setSymbol2( currentSolrDocument.getSymbol2() );
-		newSolrDocument.setSymbol3( currentSolrDocument.getSymbol3() );
 		newSolrDocument.setAgenda1( currentSolrDocument.getAgenda1() );
 		newSolrDocument.setAgenda2( currentSolrDocument.getAgenda2() );
 		newSolrDocument.setAgenda3( currentSolrDocument.getAgenda3() );
@@ -71,7 +69,7 @@ public class FileProcessor {
 		newSolrDocument.setPdfXMPTpgNPages( currentSolrDocument.getPdfXMPTpgNPages() );
 		newSolrDocument.setDateCreated( currentSolrDocument.getDateCreated() );
 	
-		// TODO Daniel set these values, code similar in old version
+		// TODO Daniel set these values, code similar in old version //NOTHING TO DO 
 		//protected Map<String, String> sessions;
 		//protected Map<String, String> agendas;
 	    
@@ -126,9 +124,13 @@ public class FileProcessor {
 		newSolrDocument.setAlternativeSymbols( newSolrDocument.getAlternativeSymbols().contains( replaceChar ) ? newSolrDocument.getAlternativeSymbols().replace( replaceChar , "") : newSolrDocument.getAlternativeSymbols() );
 		newSolrDocument.setDocType( newSolrDocument.getDocType().contains( replaceChar ) ? newSolrDocument.getDocType().replace( replaceChar , "") : newSolrDocument.getDocType() );
 		newSolrDocument.setSize( newSolrDocument.getSize().contains( replaceChar ) ? newSolrDocument.getSize().replace( replaceChar , "") : newSolrDocument.getSize() );
-		//TODO Daniel Further session and agendas Daniel Extend functionality
+		//TODO Daniel Further session and agendas Daniel Extend functionality //DONE
 		newSolrDocument.setSession1( newSolrDocument.getSession1().contains( replaceChar ) ? newSolrDocument.getSession1().replace( replaceChar , "") : newSolrDocument.getSession1() );
+		newSolrDocument.setSession2( newSolrDocument.getSession2().contains( replaceChar ) ? newSolrDocument.getSession2().replace( replaceChar , "") : newSolrDocument.getSession2() );
+		newSolrDocument.setSession3( newSolrDocument.getSession3().contains( replaceChar ) ? newSolrDocument.getSession3().replace( replaceChar , "") : newSolrDocument.getSession3() );
 		newSolrDocument.setAgenda1( newSolrDocument.getAgenda1().contains( replaceChar ) ? newSolrDocument.getAgenda1().replace( replaceChar , "") : newSolrDocument.getAgenda1() );
+		newSolrDocument.setAgenda2( newSolrDocument.getAgenda2().contains( replaceChar ) ? newSolrDocument.getAgenda2().replace( replaceChar , "") : newSolrDocument.getAgenda2() );
+		newSolrDocument.setAgenda3( newSolrDocument.getAgenda3().contains( replaceChar ) ? newSolrDocument.getAgenda3().replace( replaceChar , "") : newSolrDocument.getAgenda3() );
 		newSolrDocument.setUrlJob( newSolrDocument.getUrlJob().contains( replaceChar ) ? newSolrDocument.getUrlJob().replace( replaceChar , "") : newSolrDocument.getUrlJob() );
 		newSolrDocument.setSubjects( newSolrDocument.getSubjects().contains( replaceChar ) ? newSolrDocument.getSubjects().replace( replaceChar , "") : newSolrDocument.getSubjects() );
 		newSolrDocument.setPublicationDate( newSolrDocument.getPublicationDate().contains( replaceChar ) ? newSolrDocument.getPublicationDate().replace( replaceChar , "") : newSolrDocument.getPublicationDate() );
