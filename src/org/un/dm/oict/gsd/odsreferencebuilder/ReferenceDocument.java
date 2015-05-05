@@ -1,7 +1,9 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
 
@@ -34,23 +36,43 @@ public class ReferenceDocument {
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	/**
 	 * This overridden method is used to construct the Solr XML for the document
 	 * used to populate the Solr index
 	 */
 	public String toString() {
-		String xml = "";
-		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
-		xml += "<add>\n";
-			xml += "<doc>\n";
-				xml += "<field name=\"id\">" + this.id + "</field>\n";
-				xml += "<field name=\"symbol\">" + this.symbol + "</field>\n";
-				for(String ref : this.references) {
-					xml += "<field name=\"reference\">" + ref + "</field>\n";
+		try {
+			String xml = "<add>\n<doc>\n";
+			for (Field field : this.getClass().getDeclaredFields()) {
+				if (field.get(this) != null) {
+					if (field.getType().isAssignableFrom(Map.class)) {
+						Map<String, String> vals = ((Map<String, String>) field.get(this));
+						for (Map.Entry<String, String> kv : vals.entrySet()) {
+							if (!kv.getValue().isEmpty())
+								xml += "<field name=\"" + kv.getKey() + "\">"
+										+ Helper.makeXMLTextSafeField(kv.getValue()) + "</field>\n";
+						}
+					}else if (field.getType().isAssignableFrom(List.class)) {
+						List<String> vals = ((ArrayList<String>) field.get(this));
+						for (String kv : vals) {
+							if (!kv.isEmpty())
+								xml += "<field name=\"" + field.getName() + "\">"
+										+ Helper.makeXMLTextSafeField(kv) + "</field>\n";
+						}
+					} else {
+						if (!field.get(this).equals("") && !field.get(this).equals("<![CDATA[]]>")) {
+							xml += "<field name=\"" + field.getName() + "\">"
+								+ field.get(this) + "</field>\n";
+						}
+					}
 				}
-			xml += "</add>\n";
-		xml += "</doc>";
-		return xml;
+			}
+			xml += "</doc>\n</add>\n";
+			return xml;
+		} catch (Exception e) {
+			return "";
+		}
 	}
 	
 	public String buildNewFilename() {

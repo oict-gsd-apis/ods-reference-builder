@@ -1,6 +1,8 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
-import java.util.HashMap;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
@@ -55,52 +57,43 @@ public class SolrDocument {
 	
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	/**
 	 * This overridden method is used to construct the Solr XML for the document
 	 * used to populate the Solr index
 	 */
 	public String toString() {
-		String xml = ""; 
-		xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
-		xml += "<add>\n";
-			xml += "<doc>\n";
-				xml += "<field name=\"id\">" + this.id + "</field>\n";
-				xml += "<field name=\"symbol\">" + this.symbol + "</field>\n";
-				xml += "<field name=\"agenda1\">" + this.agenda1 + "</field>\n";
-				xml += "<field name=\"agenda2\">" + this.agenda2 + "</field>\n";
-				xml += "<field name=\"agenda3\">" + this.agenda3 + "</field>\n";
-				xml += "<field name=\"session1\">" + this.session1 + "</field>\n";
-				xml += "<field name=\"session2\">" + this.session2 + "</field>\n";
-				xml += "<field name=\"session3\">" + this.session3 + "</field>\n";
-				xml += "<field name=\"alternativeSymbols\">" + this.alternativeSymbols + "</field>\n";
-				xml += "<field name=\"title\">" + this.title + "</field>\n";
-				xml += "<field name=\"docType\">" + this.docType + "</field>\n";
-				xml += "<field name=\"size\">" + this.size + "</field>\n";
-				xml += "<field name=\"urlJob\">" + this.urlJob + "</field>\n";
-				xml += "<field name=\"subjects\">" + this.subjects + "</field>\n";
-				xml += "<field name=\"publicationDate\">" + this.publicationDate + "</field>\n";
-				xml += "<field name=\"url\"><![CDATA[" + this.url + "]]></field>\n";
-				xml += "<field name=\"languageCode\">" + this.languageCode + "</field>\n";
-				xml += "<field name=\"pdfContentLength\">" + this.pdfContentLength + "</field>\n";
-				xml += "<field name=\"pdfContentType\">" + this.pdfContentType + "</field>\n";
-				xml += "<field name=\"pdfCreationDate\">" + this.pdfCreationDate + "</field>\n";
-				xml += "<field name=\"pdfLastModified\">" + this.pdfLastModified + "</field>\n";
-				xml += "<field name=\"pdfLastSaveDate\">" + this.pdfLastSaveDate + "</field>\n";
-				xml += "<field name=\"pdfCreated\">" + this.pdfCreated + "</field>\n";
-				xml += "<field name=\"pdfDate\">" + this.pdfDate + "</field>\n";
-				xml += "<field name=\"pdfDCTermsCreated\">" + this.pdfDCTermsCreated + "</field>\n";
-				xml += "<field name=\"pdfDCTermsModified\">" + this.pdfDCTermsModified + "</field>\n";
-				xml += "<field name=\"pdfMetaCreationDate\">" + this.pdfMetaCreationDate + "</field>\n";
-				xml += "<field name=\"pdfMetaSaveDate\">" + this.pdfMetaSaveDate + "</field>\n";
-				xml += "<field name=\"pdfModified\">" + this.pdfModified + "</field>\n";
-				xml += "<field name=\"pdfProducer\">" + this.pdfProducer + "</field>\n";
-				xml += "<field name=\"pdfXMPCreatorTool\">" + this.pdfXMPCreatorTool + "</field>\n";
-				xml += "<field name=\"pdfXMPTpgNPages\">" + this.pdfXMPTpgNPages + "</field>\n";
-				xml += "<field name=\"dateCreated\">" + this.dateCreated + "</field>\n";
-				xml += "<field name=\"body_" + this.languageCode + "\">" + this.body + "</field>\n";
-				xml += "</doc>";
-			xml += "</add>\n";
-		return xml;
+		try {
+			String xml = "<add>\n<doc>\n";
+			for (Field field : this.getClass().getDeclaredFields()) {
+				if (field.get(this) != null) {
+					if (field.getType().isAssignableFrom(Map.class)) {
+						Map<String, String> vals = ((Map<String, String>) field.get(this));
+						for (Map.Entry<String, String> kv : vals.entrySet()) {
+							if (!kv.getValue().isEmpty())
+								xml += "<field name=\"" + kv.getKey() + "\">"
+										+ Helper.makeXMLTextSafeField(kv.getValue()) + "</field>\n";
+						}
+					}else if (field.getType().isAssignableFrom(List.class)) {
+						List<String> vals = ((ArrayList<String>) field.get(this));
+						for (String kv : vals) {
+							if (!kv.isEmpty())
+								xml += "<field name=\"" + field.getName() + "\">"
+										+ Helper.makeXMLTextSafeField(kv) + "</field>\n";
+						}
+					} else {
+						if (!field.get(this).equals("") && !field.get(this).equals("<![CDATA[]]>")) {
+							xml += "<field name=\"" + field.getName() + "\">"
+								+ field.get(this) + "</field>\n";
+						}
+					}
+				}
+			}
+			xml += "</doc>\n</add>\n";
+			return xml;
+		} catch (Exception e) {
+			return "";
+		}
 	}
 	
 	public String buildNewFilename() {
