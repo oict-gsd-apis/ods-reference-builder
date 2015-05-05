@@ -16,6 +16,12 @@ import java.util.Map;
  * @codeReviewer
  */
 public class OutputDatabaseMSSQL extends OutputDatabase {
+	
+	public enum InfoType {
+		Info,
+		Warning,
+		Error
+	}
 	 
 	private Connection connection = null; 
 	
@@ -105,16 +111,35 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 		}
 	}
 	
-	// TODO Kevin Warning method
-	// TODO Daniel Error method
+	@Override
+	/**
+	 * 
+	 * @param documentId
+	 * @param text
+	 * @return
+	 */
+	protected boolean insertWarning(String documentId, String text) {
+		return insertProblem(InfoType.Warning, documentId, text);
+	}
+	
+	@Override
+	/**
+	 * 
+	 * @param documentId
+	 * @param text
+	 * @return
+	 */
+	protected boolean insertError(String documentId, String text) {
+		return insertProblem(InfoType.Error, documentId, text);
+	}
 	
 	@Override
 	/**
 	 * This method like insertDocument is used to build the query string, assigning parameters and calling runQuery
 	 */
-	protected boolean insertProblem(String problemType, String documentId, String text) {
+	protected boolean insertProblem(InfoType problemType, String documentId, String text) {
 		try {			    
-		    String qry = "INSERT INTO "+ (problemType == "Warning"?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + " (\"DocumentId\", \"Text\",) VALUES(?, ?)";
+		    String qry = "INSERT INTO "+ (problemType == InfoType.Warning ?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + " (\"DocumentId\", \"Text\",) VALUES(?, ?)";
 		    Map<Integer, Object> params = new HashMap<Integer, Object>();
 		    params.put(1, documentId);
 		    params.put(2, text);

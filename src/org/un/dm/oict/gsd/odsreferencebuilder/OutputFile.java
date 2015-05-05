@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -48,9 +50,9 @@ public class OutputFile {
 					OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
 					outputStream = new BufferedWriter(outputStreamWriter);
 				} catch (FileNotFoundException ef) {
-					System.out.println("ERROR: " + ef.getMessage());
+					Helper.logMessage(InfoType.Error, ef.getMessage());
 				} catch (Exception e) {
-					System.out.println("ERROR: " + e.getMessage());
+					Helper.logMessage(InfoType.Error, e.getMessage());
 				}
 				outputStream.write(xml);				 
 			} catch (Exception e) {
@@ -60,7 +62,7 @@ public class OutputFile {
 					outputStream.close();
 					fileOutputStream.close();
 				} catch (IOException e) {
-					System.out.println("ERROR: " + e.getMessage());
+					Helper.logMessage(InfoType.Error, e.getMessage());
 				}
 			}
 	    }

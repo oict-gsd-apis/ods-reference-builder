@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
 import org.w3c.dom.Document;
 
 /**
@@ -29,12 +30,10 @@ public class TextExtractorFile {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		    DocumentBuilder builder = factory.newDocumentBuilder();
 		    Document doc = builder.parse( new File(currXmlFilename) ); 
-		    
 		    // Map Schema onto SolrDocument Object
-		    currentSolrDocument = mapXmlSolrDocument(currentSolrDocument, doc);
-		    		    
+		    currentSolrDocument = mapXmlSolrDocument(currentSolrDocument, doc);	    
 		} catch (Exception e) {
-			
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
 		return currentSolrDocument;
 	}
@@ -117,7 +116,7 @@ public class TextExtractorFile {
 		try {
 			field = xpath.evaluate("/add/doc/field[@name='"+ fieldName + "']/text()", doc);
 		} catch (Exception e) {
-			System.out.println("ERROR GENERAL: " + e.getMessage());
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
 		return field;
 	}

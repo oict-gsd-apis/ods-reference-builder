@@ -3,6 +3,8 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -52,8 +54,13 @@ public class ReferenceDocument {
 	}
 	
 	public String buildNewFilename() {
-		String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
-		return AppProp.referenceOutputFolder  + tf;
+		try {
+			String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
+			return AppProp.referenceOutputFolder  + tf;
+		} catch (Exception e) {
+			Helper.logMessage(InfoType.Error, e.getMessage());
+			return "";
+		}
 	}
 	
 	public String getId() {

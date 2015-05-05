@@ -3,6 +3,8 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -60,19 +62,22 @@ public class Producer implements Runnable {
 					String currXmlFilename = child.getAbsolutePath();
 					// Verify its an XML file, that is all we are interested in
 					if (currXmlFilename.endsWith(".xml")) {
-						
-						// Instantiate two new SolrDocuments and one Reference Document
-						SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
-						SolrDocument newSolrDocument = new SolrDocument();
-						ReferenceDocument newReferenceDocument = new ReferenceDocument();
-						
-						// Set both the currentSolrDocument and newSolrDocuments filename to be the same
-						currentSolrDocument.setFilename(currXmlFilename);
-						newSolrDocument.setFilename(currXmlFilename);
-						newReferenceDocument.setFilename(currXmlFilename);
-	
-						processSolrDocuments(currentSolrDocument, newSolrDocument);
-						processReferenceDocuments(newSolrDocument, newReferenceDocument);
+						try {
+							// Instantiate two new SolrDocuments and one Reference Document
+							SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
+							SolrDocument newSolrDocument = new SolrDocument();
+							ReferenceDocument newReferenceDocument = new ReferenceDocument();
+							
+							// Set both the currentSolrDocument and newSolrDocuments filename to be the same
+							currentSolrDocument.setFilename(currXmlFilename);
+							newSolrDocument.setFilename(currXmlFilename);
+							newReferenceDocument.setFilename(currXmlFilename);
+		
+							processSolrDocuments(currentSolrDocument, newSolrDocument);
+							processReferenceDocuments(newSolrDocument, newReferenceDocument);
+						} catch (Exception e) {
+							Helper.logMessage(InfoType.Error, e.getMessage());
+						}
 					}
 				}
 			}

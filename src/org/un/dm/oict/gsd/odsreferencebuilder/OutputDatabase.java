@@ -2,6 +2,8 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.util.Map;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -17,11 +19,15 @@ public abstract class OutputDatabase {
 	
 	abstract boolean insertDocument(String documentType, String documentId, String documentSymbol, String language, String title, String folder, String fileName);
 	
-	abstract boolean insertProblem(String problemType, String documentId, String text);
+	abstract boolean insertProblem(InfoType problemType, String documentId, String text);
 	
 	abstract void runQuery(String query, Map<Integer, Object> params);
 	
 	abstract boolean insertSolrDocument(SolrDocument newSolrDocument);
 	
-	abstract boolean insertReferenceDocument(ReferenceDocument newReferenceDocument) ;
+	abstract boolean insertReferenceDocument(ReferenceDocument newReferenceDocument);
+	
+	abstract boolean insertWarning(String documentId, String text);
+	
+	abstract boolean insertError(String documentId, String text);
 }

@@ -3,6 +3,8 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -82,8 +84,13 @@ public class SolrDocument {
 	}
 	
 	public String buildNewFilename() {
-		String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
-		return AppProp.documentOutputFolder + tf; 
+		try {
+			String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
+			return AppProp.documentOutputFolder + tf; 
+		} catch (Exception e) {
+			Helper.logMessage(InfoType.Error, e.getMessage());
+			return "";
+		}
 	}
 
 	public String getId() {

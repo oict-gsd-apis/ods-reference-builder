@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -91,7 +93,6 @@ public class FileProcessor {
 		return Helper.checkBodyContainsInvalidChars(newSolrDocument, AppProp.invalidChars);
 	}
 
-	// TODO Kevin add removal of breaklines regardless of whether a new body is extracted
 	/**
 	 * This method is used as a wrapper to cleanse the data
 	 * @param newSolrDocument
@@ -110,6 +111,8 @@ public class FileProcessor {
 		newSolrDocument = ensureSymbolUrl(newSolrDocument);
 		// Check body contains relevant text
 		newSolrDocument = processBodyText(newSolrDocument);
+		// Remove whitespace from body
+		newSolrDocument.setBody(Helper.minimizeWhitespace(newSolrDocument.getBody()));
 			
 		return newSolrDocument; 
 	}
@@ -138,16 +141,20 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
 	private static SolrDocument ensureSymbolUrl(SolrDocument newSolrDocument) {
-		/*String url = newSolrDocument.getUrl().toUpperCase();
+		String url = newSolrDocument.getUrl().toUpperCase();
 		String symbol = newSolrDocument.getSymbol().toUpperCase();
 		if (!url.contains(symbol)) {
-			// Log to database
-		}*/
+			Helper.logMessage(InfoType.Error, newSolrDocument, "Symbol not in URL");
+		}
 		return newSolrDocument;
 	}
 	
-	// TODO Kevin Implement logic
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -155,10 +162,10 @@ public class FileProcessor {
 	 */
 	private static SolrDocument processEmptyTitles(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
+		AppProp.database.insertWarning(newSolrDocument.getId(), "Empty Title");
 		return newSolrDocument;
 	}
 	
-	// TODO Kevin Implement logic
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -166,6 +173,7 @@ public class FileProcessor {
 	 */
 	private static SolrDocument processFutureDates(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
+		Helper.logMessage(InfoType.Warning, newSolrDocument, "Future Date (" + newSolrDocument.getPublicationDate() + ")");
 		return newSolrDocument;
 	}
 	
@@ -196,12 +204,12 @@ public class FileProcessor {
 			Integer.parseInt(size);
 		} catch (NumberFormatException e) {
 			size = "0";
+			Helper.logMessage(InfoType.Warning, newSolrDocument, "Size not number (" + newSolrDocument.getSize() + ")");
 		}
 		newSolrDocument.setSize( size );
 		return newSolrDocument;
 	}
 	
-	// TODO Kevin Expansion of business logic required & Counts per reference
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -222,8 +230,16 @@ public class FileProcessor {
 			}
 		}
 		newReferenceDocument.setId( newSolrDocument.getId() );
+		newReferenceDocument.setSymbol( newSolrDocument.getSymbol() );
+		newReferenceDocument.setTitle( newSolrDocument.getTitle() );
+		
+		newReferenceDocument.setPublicationDate( newSolrDocument.getPublicationDate() );
+		newReferenceDocument.setTitle( newSolrDocument.getTitle() );
+		newReferenceDocument.setTitle( newSolrDocument.getTitle() );
+		newReferenceDocument.setUrl( newSolrDocument.getUrl() );
 		newReferenceDocument.setLanguageCode( newSolrDocument.getLanguageCode() );
-		newReferenceDocument.setReferences( refs );
+		newReferenceDocument.setDateCreated( newSolrDocument.getDateCreated() );
+		newReferenceDocument.setReferences( refs );		
 		
 		return newReferenceDocument;
 	}
