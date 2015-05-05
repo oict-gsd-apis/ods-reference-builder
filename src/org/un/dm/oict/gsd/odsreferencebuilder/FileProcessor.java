@@ -21,7 +21,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument processFile(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) {
+	protected static SolrDocument processFile(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) {
 		
 		newSolrDocument = extractMapData(currentSolrDocument, newSolrDocument);
 
@@ -37,7 +37,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument extractMapData(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) { 
+	private static SolrDocument extractMapData(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) { 
 		newSolrDocument.setId( currentSolrDocument.getId() );
 		newSolrDocument.setSymbol( currentSolrDocument.getSymbol() );
 		newSolrDocument.setLanguageCode( currentSolrDocument.getLanguageCode() );
@@ -89,7 +89,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static boolean checkBodyValidity(SolrDocument newSolrDocument) {
+	protected static boolean checkBodyValidity(SolrDocument newSolrDocument) {
 		return Helper.checkBodyContainsInvalidChars(newSolrDocument, AppProp.invalidChars);
 	}
 
@@ -99,7 +99,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument cleanseData(SolrDocument newSolrDocument) { 
+	protected static SolrDocument cleanseData(SolrDocument newSolrDocument) { 
 		// Remove ? from particular fields
 		newSolrDocument = processQMarks(newSolrDocument);
 		// Empty titles
@@ -122,7 +122,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument processQMarks(SolrDocument newSolrDocument) { 
+	private static SolrDocument processQMarks(SolrDocument newSolrDocument) { 
 		String replaceChar = "?";
 		newSolrDocument.setId( newSolrDocument.getId().contains( replaceChar ) ? newSolrDocument.getId().replace( replaceChar , "") : newSolrDocument.getId() );
 		//newSolrDocument.setSymbol( newSolrDocument.getSymbol().contains( replaceChar ) ? newSolrDocument.getSymbol().replace( replaceChar , "") : newSolrDocument.getSymbol() );
@@ -139,7 +139,7 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
-	static SolrDocument ensureSymbolUrl(SolrDocument newSolrDocument) {
+	private static SolrDocument ensureSymbolUrl(SolrDocument newSolrDocument) {
 		/*String url = newSolrDocument.getUrl().toUpperCase();
 		String symbol = newSolrDocument.getSymbol().toUpperCase();
 		if (!url.contains(symbol)) {
@@ -154,7 +154,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument processEmptyTitles(SolrDocument newSolrDocument) { 
+	private static SolrDocument processEmptyTitles(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
 		return newSolrDocument;
 	}
@@ -165,7 +165,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument processFutureDates(SolrDocument newSolrDocument) { 
+	private static SolrDocument processFutureDates(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
 		return newSolrDocument;
 	}
@@ -176,7 +176,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument processBodyText(SolrDocument newSolrDocument) { 
+	private static SolrDocument processBodyText(SolrDocument newSolrDocument) { 
 		String body = newSolrDocument.getBody();
 		// If bodies text is insufficient call Tika/OCR server and obtain new body
 		if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
@@ -192,7 +192,7 @@ public class FileProcessor {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static SolrDocument processFieldSize(SolrDocument newSolrDocument) {
+	private static SolrDocument processFieldSize(SolrDocument newSolrDocument) {
 		String size = newSolrDocument.getSize();
 		try {
 			Integer.parseInt(size);
@@ -211,7 +211,7 @@ public class FileProcessor {
 	 * @param newReferenceDocument
 	 * @return
 	 */
-	static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
+	protected static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
 	    String body = newSolrDocument.getBody();
 	    String regex = AppProp.referenceRegex;
 	    List<String> refs = new ArrayList<String>();

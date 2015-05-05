@@ -12,17 +12,17 @@ import java.util.List;
  */
 public class ReferenceDocument {
 
-	protected String id;
-	protected String symbol;
-	protected String title;
-	protected String publicationDate;
-	protected String url;
-	protected String languageCode;
-	protected String dateCreated;
+	private String id;
+	private String symbol;
+	private String title;
+	private String publicationDate;
+	private String url;
+	private String languageCode;
+	private String dateCreated;
 	// Multi-valued Solr Field
-	protected List<String> references;
+	private List<String> references;
 	
-	protected String filename;
+	private String filename;
 	
 	/**
 	 * 

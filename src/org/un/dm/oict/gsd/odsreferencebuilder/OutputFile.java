@@ -20,7 +20,7 @@ public class OutputFile {
 	 * @param filename
 	 * @param xml
 	 */
-	void writeSolrDocument(String filename, String xml) {
+	protected void writeSolrDocument(String filename, String xml) {
 		writeDocument(filename, xml);
 	}
 	
@@ -29,7 +29,7 @@ public class OutputFile {
 	 * @param filename
 	 * @param xml
 	 */
-	void writeReferenceDocument(String filename, String xml) {
+	protected void writeReferenceDocument(String filename, String xml) {
 		writeDocument(filename, xml);
 	}
 	

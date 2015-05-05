@@ -38,7 +38,7 @@ public class Service {
 		initializeVariables();
 		
 		try { 	
-			// Start the Producer and Consumer on individual threads
+			// Start the Producer and Consumers on individual threads, therefore 3 threads
 			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
 	        new Thread(producer).start();
 	        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
@@ -55,7 +55,7 @@ public class Service {
 	/**
 	 * This method is used to initialize the variables and logger
 	 */
-	static void initializeVariables() {
+	private static void initializeVariables() {
 		// Initialize the config file, log file and set the variables
 		Helper.initialiseConfigFile();
 		

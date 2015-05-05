@@ -24,7 +24,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * This method is used to identify is a connection exists
 	 * @return
 	 */
-	public boolean isConnected() {
+	protected boolean isConnected() {
 		try {
 			if (!connection.isClosed())
 				return true;
@@ -40,7 +40,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	/**
 	 * This method is used to establish a connection based on variables set in the config file
 	 */
-	public void establishConnection() {
+	protected void establishConnection() {
 		
 		try{
 			String host = "jdbc:sqlserver://" + AppProp.databaseLocation + ":"+ AppProp.databasePort +";DatabaseName="+ AppProp.databaseName;
@@ -60,7 +60,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param folder
 	 * @return
 	 */
-	public boolean insertSolrDocument(SolrDocument newSolrDocument) {
+	protected boolean insertSolrDocument(SolrDocument newSolrDocument) {
 		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), newSolrDocument.getFilename().substring(0,newSolrDocument.getFilename().lastIndexOf("/")+1), newSolrDocument.getFilename().substring(newSolrDocument.getFilename().lastIndexOf("/")+1, newSolrDocument.getFilename().length()));
 	}
 	
@@ -71,7 +71,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param folder
 	 * @return
 	 */
-	public boolean insertReferenceDocument(SolrDocument newSolrDocument) {
+	protected boolean insertReferenceDocument(SolrDocument newSolrDocument) {
 		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), newSolrDocument.getFilename().substring(0,newSolrDocument.getFilename().lastIndexOf("/")+1), newSolrDocument.getFilename().substring(newSolrDocument.getFilename().lastIndexOf("/")+1, newSolrDocument.getFilename().length()));
 	}
 	
@@ -89,7 +89,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param fileName
 	 * @return
 	 */
-	public boolean insertDocument(String documentType, String documentId, String documentSymbol, String language, String title, String folder, String fileName) {
+	protected boolean insertDocument(String documentType, String documentId, String documentSymbol, String language, String title, String folder, String fileName) {
 		try {			    
 		    String qry = "INSERT INTO "+ (documentType == "Document"?  AppProp.databaseDocumentTable : AppProp.databaseReferenceTable) + " (\"DocumentId\", \"DocumentSymbol\", \"Language\", \"Title\", \"Folder\", \"Filename\") VALUES(?, ?, ?, ?, ?, ?)";
 		    Map<Integer, Object> params = new HashMap<Integer, Object>();
@@ -117,7 +117,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	/**
 	 * This method like insertDocument is used to build the query string, assigning parameters and calling runQuery
 	 */
-	public boolean insertProblem(String problemType, String documentId, String text) {
+	protected boolean insertProblem(String problemType, String documentId, String text) {
 		try {			    
 		    String qry = "INSERT INTO "+ (problemType == "Warning"?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + " (\"DocumentId\", \"Text\",) VALUES(?, ?)";
 		    Map<Integer, Object> params = new HashMap<Integer, Object>();
@@ -139,7 +139,7 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param query
 	 * @param params
 	 */
-	public void runQuery(String query, Map<Integer, Object> params) {
+	protected void runQuery(String query, Map<Integer, Object> params) {
 		PreparedStatement pst;
 		try {
 			pst = this.connection.prepareStatement(query);

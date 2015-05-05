@@ -23,7 +23,7 @@ public class TextExtractorFile {
 	 * @param currXmlFilename
 	 * @return
 	 */
-	static SolrDocument readXmlDocument(String currXmlFilename) { 
+	protected static SolrDocument readXmlDocument(String currXmlFilename) { 
 		SolrDocument currentSolrDocument = new SolrDocument();
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -46,7 +46,7 @@ public class TextExtractorFile {
 	 * @param doc
 	 * @return
 	 */
-	static SolrDocument mapXmlSolrDocument(SolrDocument currentSolrDocument, Document doc) {
+	private static SolrDocument mapXmlSolrDocument(SolrDocument currentSolrDocument, Document doc) {
 		
 	    currentSolrDocument.setId( getXmlElement(doc, "id") );
 	    currentSolrDocument.setSymbol( getXmlElement(doc, "symbol") );
@@ -110,7 +110,7 @@ public class TextExtractorFile {
 	 * @param fieldName
 	 * @return
 	 */
-	static String getXmlElement(Document doc, String fieldName) {
+	private static String getXmlElement(Document doc, String fieldName) {
 		String field = "";
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		XPath xpath = xPathfactory.newXPath();

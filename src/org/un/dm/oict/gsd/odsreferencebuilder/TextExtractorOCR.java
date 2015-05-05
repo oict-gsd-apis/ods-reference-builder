@@ -31,7 +31,7 @@ public class TextExtractorOCR {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	static String obtainText(SolrDocument newSolrDocument) { 
+	protected static String obtainText(SolrDocument newSolrDocument) { 
 		// Obtain the jobUrl of the Solr Document
 		String pdfUrl = newSolrDocument.getUrlJob();
 		
@@ -51,7 +51,7 @@ public class TextExtractorOCR {
 	 * @param pdfUrl
 	 * @return
 	 */
-	static String performCURLCommand(String pdfUrl) {
+	protected static String performCURLCommand(String pdfUrl) {
 		// Construct the cURL command
 		String[] command = { "curl",
 	            			"-T",
@@ -74,7 +74,7 @@ public class TextExtractorOCR {
 	 * @param command
 	 * @return
 	 */
-	static String performProcess(String[] command) {
+	private static String performProcess(String[] command) {
 		// Create a new ProcessBuilder which will run the command
         ProcessBuilder probuilder = new ProcessBuilder( command );
         
@@ -119,7 +119,7 @@ public class TextExtractorOCR {
 	 * @param val
 	 * @return
 	 */
-	static String minimizeWhitespace(String val) {
+	private static String minimizeWhitespace(String val) {
 		return val.replaceAll("[\n\r]","") + "\n";
 	}
 	
@@ -133,7 +133,7 @@ public class TextExtractorOCR {
 	 * @param languageCode
 	 * @return
 	 */
-	static String performCompleteOCR(String pdfUrl, String languageCode) {
+	protected static String performCompleteOCR(String pdfUrl, String languageCode) {
 		String tempId = UUID.randomUUID().toString();
 		String imgFile = AppProp.tempTesseractImgOutputDir + "" + tempId + ".tif";
 		String txtFile = AppProp.tempTesseractImgOutputDir + "" + tempId + "";
@@ -175,7 +175,7 @@ public class TextExtractorOCR {
 	 * @param encoding
 	 * @return
 	 */
-	static String readFile(String path, Charset encoding) {
+	protected static String readFile(String path, Charset encoding) {
 		byte[] encoded = null;
 		try {
 			encoded = Files.readAllBytes(Paths.get(path));
@@ -191,7 +191,7 @@ public class TextExtractorOCR {
 	 * @param languageCode
 	 * @return
 	 */
-	static String mapLanguageCode(String languageCode) {
+	private static String mapLanguageCode(String languageCode) {
 		if (languageCode.equals("en"))
 			return "eng";
 		else if (languageCode.equals("fr"))

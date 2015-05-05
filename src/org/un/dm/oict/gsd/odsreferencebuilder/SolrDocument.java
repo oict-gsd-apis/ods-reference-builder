@@ -12,48 +12,48 @@ import java.util.Map;
  */
 public class SolrDocument {
 	
-	protected String id;
-	protected String symbol;
-	protected String symbol2;
-	protected String symbol3;
-	protected String agenda1;
-	protected String agenda2;
-	protected String agenda3;
-	protected String session1;
-	protected String session2;
-	protected String session3;
-	protected String alternativeSymbols;
-	protected String title;
-	protected String docType;
-	protected String size;
-	protected Map<String, String> sessions;
-	protected Map<String, String> agendas;
-	protected String urlJob;
-	protected String subjects;
-	protected String publicationDate;
-	protected String url;
-	protected String languageCode;
-	protected String body;
-	protected String pdfContentLength;
-	protected String pdfContentType;
-	protected String pdfCreationDate;
-	protected String pdfLastModified;
-	protected String pdfLastSaveDate;
-	protected String pdfCreated;
-	protected String pdfDate;
-	protected String pdfDCTermsCreated;
-	protected String pdfDCTermsModified;
-	protected String pdfMetaCreationDate;
-	protected String pdfMetaSaveDate;
-	protected String pdfModified;
-	protected String pdfProducer;
-	protected String pdfXMPCreatorTool;
-	protected String pdfXMPTpgNPages;
-	protected String dateCreated;
+	private String id;
+	private String symbol;
+	private String symbol2;
+	private String symbol3;
+	private String agenda1;
+	private String agenda2;
+	private String agenda3;
+	private String session1;
+	private String session2;
+	private String session3;
+	private String alternativeSymbols;
+	private String title;
+	private String docType;
+	private String size;
+	private Map<String, String> sessions;
+	private Map<String, String> agendas;
+	private String urlJob;
+	private String subjects;
+	private String publicationDate;
+	private String url;
+	private String languageCode;
+	private String body;
+	private String pdfContentLength;
+	private String pdfContentType;
+	private String pdfCreationDate;
+	private String pdfLastModified;
+	private String pdfLastSaveDate;
+	private String pdfCreated;
+	private String pdfDate;
+	private String pdfDCTermsCreated;
+	private String pdfDCTermsModified;
+	private String pdfMetaCreationDate;
+	private String pdfMetaSaveDate;
+	private String pdfModified;
+	private String pdfProducer;
+	private String pdfXMPCreatorTool;
+	private String pdfXMPTpgNPages;
+	private String dateCreated;
 	
-	protected String filename;
+	private String filename;
 	
-	protected boolean requiresNewBody;
+	private boolean requiresNewBody;
 	
 	/**
 	 * 

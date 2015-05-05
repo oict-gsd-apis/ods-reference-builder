@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Consumer implements Runnable {
 	
-	public enum ConsumerRunType {
+	protected enum ConsumerRunType {
 		Solr,
 		Reference
 	}

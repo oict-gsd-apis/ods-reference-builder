@@ -13,37 +13,37 @@ import org.apache.log4j.Logger;
  */
 public class AppProp {
 	
-	static String rootFileDirectory = "";
+	protected static String rootFileDirectory = "";
 	
-	static String solrInstance = "";
-	static String solrCollection = "";
-	static String solrUsername = "";
-	static String solrPassword = "";
-	static boolean writeSolrDocumentToSolr = false;
+	protected static String solrInstance = "";
+	protected static String solrCollection = "";
+	protected static String solrUsername = "";
+	protected static String solrPassword = "";
+	protected static boolean writeSolrDocumentToSolr = false;
 	
-	static OutputDatabase database;
-	static String databaseLocation = "";
-	static String databaseName = "";
-	static String databasePort = "";
-	static String databaseUsername = "";
-	static String databasePassword = "";
-	static String databaseDocumentTable = "";
-	static String databaseReferenceTable = "";
-	static String databaseWarningTable = "";
-	static String databaseErrorTable = "";
+	protected static OutputDatabase database;
+	protected static String databaseLocation = "";
+	protected static String databaseName = "";
+	protected static String databasePort = "";
+	protected static String databaseUsername = "";
+	protected static String databasePassword = "";
+	protected static String databaseDocumentTable = "";
+	protected static String databaseReferenceTable = "";
+	protected static String databaseWarningTable = "";
+	protected static String databaseErrorTable = "";
 	
-	static String referenceOutputFolder = "";
-	static String documentOutputFolder = "";
+	protected static String referenceOutputFolder = "";
+	protected static String documentOutputFolder = "";
 	
-	static String tikaTesseractServer = "";
-	static String tempTesseractImgOutputDir = "";
-	static String referenceRegex = "";
-	static int pollDuration = 0;
-	static char[] invalidChars;
+	protected static String tikaTesseractServer = "";
+	protected static String tempTesseractImgOutputDir = "";
+	protected static String referenceRegex = "";
+	protected static int pollDuration = 0;
+	protected static char[] invalidChars;
 	
-	static Logger log;
-	static Properties configFile;
+	protected static Logger log;
+	protected static Properties configFile;
 	
-	static boolean debug = false;
+	protected static boolean debug = false;
 	
 }
