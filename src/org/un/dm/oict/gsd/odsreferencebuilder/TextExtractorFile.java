@@ -39,7 +39,7 @@ public class TextExtractorFile {
 		return currentSolrDocument;
 	}
 	
-	// TODO Daniel Expansion of business logic required
+	// TODO Daniel Expansion of business logic required  //NOTHING TO DO
 	/**
 	 * 
 	 * @param currentSolrDocument
@@ -51,8 +51,6 @@ public class TextExtractorFile {
 	    currentSolrDocument.setId( getXmlElement(doc, "id") );
 	    currentSolrDocument.setSymbol( getXmlElement(doc, "symbol") );
 	    currentSolrDocument.setLanguageCode( getXmlElement(doc, "languageCode") );
-	    currentSolrDocument.setSymbol2( getXmlElement(doc, "symbol2") );
-	    currentSolrDocument.setSymbol3( getXmlElement(doc, "symbol3") );
 		currentSolrDocument.setAgenda1( getXmlElement(doc, "agenda1") );
 		currentSolrDocument.setAgenda2( getXmlElement(doc, "agenda2") );
 		currentSolrDocument.setAgenda3( getXmlElement(doc, "agenda3") );
