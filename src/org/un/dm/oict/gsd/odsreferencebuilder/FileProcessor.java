@@ -89,7 +89,7 @@ public class FileProcessor {
 	 * @return
 	 */
 	static boolean checkBodyValidity(SolrDocument newSolrDocument) {
-		return checkBodyContainsInvalidChars(newSolrDocument, new char[] {'\uFFFD','\uF02A'});
+		return Helper.checkBodyContainsInvalidChars(newSolrDocument, AppProp.invalidChars);
 	}
 
 	// TODO add removal of breaklines regardless of whether a new body is extracted
@@ -229,23 +229,4 @@ public class FileProcessor {
 		
 		return newReferenceDocument;
 	}
-	
-	/**
-	 * 
-	 * @param newSolrDocument
-	 * @param invalidChars
-	 * @return
-	 */
-	static boolean checkBodyContainsInvalidChars(SolrDocument newSolrDocument, char[] invalidChars) {
-		String body = newSolrDocument.getBody();
-		boolean found = false;
-		for(char c : invalidChars) {
-			if (body.contains(Character.toString(c))){
-				found =  true;
-				break; //once one of the characters is found breaks the loop 
-			}
-		}
-		return found;
-	}
-	
 }

@@ -58,6 +58,7 @@ public class Service {
 		
 		AppProp.log = Logger.getLogger(Service.class);
 
+		AppProp.invalidChars = new char[] {'\uFFFD','\uF02A'};
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
 		AppProp.solrInstance = Helper.getProperty("solrInstance");
 		AppProp.solrCollection = Helper.getProperty("solrCollection");

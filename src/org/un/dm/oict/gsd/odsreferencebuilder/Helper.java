@@ -70,4 +70,32 @@ public class Helper {
 		long time = date.getTime();
 		return new Timestamp(time);
 	}
+	
+	/**
+	 * This method is used to attempt to identify invalid bodies
+	 * @param newSolrDocument
+	 * @param invalidChars
+	 * @return
+	 */
+	static boolean checkBodyContainsInvalidChars(SolrDocument newSolrDocument, char[] invalidChars) {
+		String body = newSolrDocument.getBody();
+		return checkBodyContainsInvalidChars(body, invalidChars);
+	}
+	
+	/**
+	 * 
+	 * @param body
+	 * @param invalidChars
+	 * @return
+	 */
+	static boolean checkBodyContainsInvalidChars(String body, char[] invalidChars) {
+		boolean found = false;
+		for(char c : invalidChars) {
+			if (body.contains(Character.toString(c))){
+				found =  true;
+				break; //once one of the characters is found breaks the loop 
+			}
+		}
+		return found;
+	}
 }

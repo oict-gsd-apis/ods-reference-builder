@@ -39,6 +39,7 @@ public class AppProp {
 	static String tempTesseractImgOutputDir = "";
 	static String referenceRegex = "";
 	static int pollDuration = 0;
+	static char[] invalidChars;
 	
 	static Logger log;
 	static Properties configFile;

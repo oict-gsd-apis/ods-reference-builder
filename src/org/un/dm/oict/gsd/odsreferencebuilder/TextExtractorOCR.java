@@ -59,7 +59,13 @@ public class TextExtractorOCR {
 	            			"http://frankie:9998/tika",
 	            			"--header",
 	            			"\"Accept: text/plain\""};
-		return performProcess(command);
+		String body = performProcess(command);
+		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
+			// TODO log to process later as Tika was unable to obtain a good version
+			// could be automated to do performCompleteOCR
+		}
+			
+		return body;
 	}
 	
 	/**
