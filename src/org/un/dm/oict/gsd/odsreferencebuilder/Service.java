@@ -30,7 +30,7 @@ public class Service {
 	public static void main(String args[]) {
 		
 		// Initialize the two blocking queues
-		/*processedSolrDocuments = new ArrayBlockingQueue<>(1000000);
+		processedSolrDocuments = new ArrayBlockingQueue<>(1000000);
 		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
 	
 		// Initialize the config file, log file and set the variables
@@ -44,8 +44,8 @@ public class Service {
 	        new Thread(consumer).start();
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
-		}*/
-		TextExtractorOCR.performCompleteOCR("/home/daniel/Desktop/testFiles/", "/home/daniel/Desktop/G9951054.PDF" , "ar");
+		}
+		//TextExtractorOCR.performCompleteOCR("/home/daniel/Desktop/testFiles/", "/home/daniel/Desktop/G9951054.PDF" , "ar");
 	}
 	
 	/**

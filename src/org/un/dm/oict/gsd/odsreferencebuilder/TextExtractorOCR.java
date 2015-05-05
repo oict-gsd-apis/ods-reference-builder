@@ -1,14 +1,12 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
@@ -60,6 +58,12 @@ public class TextExtractorOCR {
 		return performProcess(command);
 	}
 	
+	/**
+	 * This is a generic method used to perform a process using
+	 * a ProcessBuilder object
+	 * @param command
+	 * @return
+	 */
 	static String performProcess(String[] command) {
 		// Create a new ProcessBuilder which will run the command
         ProcessBuilder probuilder = new ProcessBuilder( command );
@@ -84,6 +88,8 @@ public class TextExtractorOCR {
 				// Remove excess white space
 				if (line.length() > 0)
 					body += minimizeWhitespace(line);
+				if (AppProp.debug)
+					System.out.println(line);
 			}
 		} catch (IOException e) {
 			return "";
@@ -98,10 +104,25 @@ public class TextExtractorOCR {
         return body;
 	}
 	
+	/**
+	 * This method is used to remove some of the whitespace in the body
+	 * @param val
+	 * @return
+	 */
 	static String minimizeWhitespace(String val) {
 		return val.replaceAll("[\n\r]","") + "\n";
 	}
 	
+	/**
+	 * This method is used to run a complete OCR process:
+	 * 	Ghostscript
+	 *  Tesseract
+	 *  Text Extraction
+	 * @param tempOutputDir
+	 * @param pdfUrl
+	 * @param languageCode
+	 * @return
+	 */
 	static String performCompleteOCR(String tempOutputDir, String pdfUrl, String languageCode) {
 		String tempId = UUID.randomUUID().toString();
 		String imgFile = tempOutputDir + "" + tempId + ".tif";
@@ -138,6 +159,12 @@ public class TextExtractorOCR {
 		return body;
 	}
 	
+	/**
+	 * This method is used to read the contents of a file
+	 * @param path
+	 * @param encoding
+	 * @return
+	 */
 	static String readFile(String path, Charset encoding) {
 		byte[] encoded = null;
 		try {
@@ -148,12 +175,25 @@ public class TextExtractorOCR {
 		return new String(encoded, encoding);
 	}
 
+	/**
+	 * This method is used to map solr language code i.e. en
+	 * onto tesseract language codes i.e. eng
+	 * @param languageCode
+	 * @return
+	 */
 	static String mapLanguageCode(String languageCode) {
-		// en-> eng
 		if (languageCode.equals("en"))
 			return "eng";
+		else if (languageCode.equals("fr"))
+			return "fre";
+		else if (languageCode.equals("es"))
+			return "spa";
 		else if (languageCode.equals("ar"))
 			return "ara";
+		else if (languageCode.equals("ru"))
+			return "rus";
+		else if (languageCode.equals("zh-cn"))
+			return "chi_sim";
 		else
 			return "eng";
 	}

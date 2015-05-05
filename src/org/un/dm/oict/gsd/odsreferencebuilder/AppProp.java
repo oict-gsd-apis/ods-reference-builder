@@ -42,4 +42,6 @@ public class AppProp {
 	static Logger log;
 	static Properties configFile;
 	
+	static boolean debug = false;
+	
 }
