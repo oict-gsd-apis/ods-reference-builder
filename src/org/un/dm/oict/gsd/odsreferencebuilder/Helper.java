@@ -139,14 +139,14 @@ public class Helper {
 		String msg = "";
 		if (type == InfoType.Info) {
 			msg += "INFO:";
-			msg += " Id (" + newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" + ") " + message;
+			msg += " Id (" + ((newSolrDocument != null) ? newSolrDocument.getId() : "NOT SET") + ") " + message;
 		} else if (type == InfoType.Warning) {
 			msg += "WARNING:";
-			msg += " Id (" + newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" + ") " + message;
+			msg += " Id (" + ((newSolrDocument != null) ? newSolrDocument.getId() : "NOT SET") + ") " + message;
 			AppProp.database.insertWarning(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET", msg);
 		} else if (type == InfoType.Error) {
 			msg += "ERROR:";
-			msg += " Id (" + newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" + ") " + message;
+			msg += " Id (" + ((newSolrDocument != null) ? newSolrDocument.getId() : "NOT SET") + ") " + message;
 			AppProp.database.insertError(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET", msg);
 		}
 		System.out.println(msg);
@@ -605,4 +605,14 @@ public class Helper {
 	static String makeXMLTextSafeField(String text) {
 		return "<![CDATA[" + text.replace("<", "").replace(">", "").replace("&", "").replace("\\n", "").replace("\\r", "") + "]]>";
 	}
+	
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 */
+	static String makeXMLTextSafeUrl(String text) {
+		return "<![CDATA[" + text.replace("<", "").replace(">", "").replace("\\n", "").replace("\\r", "") + "]]>";
+	}
+	
 }

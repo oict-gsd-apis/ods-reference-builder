@@ -52,17 +52,19 @@ public class TextExtractorOCR {
 	 */
 	protected static String performCURLCommand(SolrDocument newSolrDocument) {
 		String pdfUrl = newSolrDocument.getUrlJob();
+		pdfUrl = pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/DATA/" + pdfUrl;
 		// Construct the cURL command
 		String[] command = { "curl",
 	            			"-T",
-	            			pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/DATA/" + pdfUrl,
+	            			pdfUrl,
 	            			"http://frankie:9998/tika",
 	            			"--header",
 	            			"\"Accept: text/plain\""};
 		String body = performProcess(command);
 		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
 			// IMPROVEMENT could be automated to do performCompleteOCR
-			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika");
+			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika - Attempting to fix with full OCR");
+			body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
 		}
 			
 		return body;

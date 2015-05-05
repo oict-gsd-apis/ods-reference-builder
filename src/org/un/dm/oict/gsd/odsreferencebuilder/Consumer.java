@@ -45,7 +45,7 @@ public class Consumer implements Runnable {
 		try {
 			// Sleep X seconds, allowing enough time for both
 			// blocking queues to have an initial document
-			Thread.sleep(3 * 1000);
+			Thread.sleep(30 * 1000);
 		} catch (InterruptedException e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
 		}

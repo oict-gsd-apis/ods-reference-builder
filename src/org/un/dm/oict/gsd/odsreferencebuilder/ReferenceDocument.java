@@ -62,8 +62,13 @@ public class ReferenceDocument {
 						}
 					} else {
 						if (!field.get(this).equals("") && !field.get(this).equals("<![CDATA[]]>")) {
-							xml += "<field name=\"" + field.getName() + "\">"
-								+ field.get(this) + "</field>\n";
+							if (field.getName().toLowerCase().equals("url")) {
+								xml += "<field name=\"" + field.getName() + "\">"
+								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
+							} else {
+								xml += "<field name=\"" + field.getName() + "\">"
+								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
+							}
 						}
 					}
 				}

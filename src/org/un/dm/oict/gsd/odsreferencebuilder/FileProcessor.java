@@ -1,6 +1,7 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,11 +71,6 @@ public class FileProcessor {
 		newSolrDocument.setPdfXMPCreatorTool( currentSolrDocument.getPdfXMPCreatorTool() );
 		newSolrDocument.setPdfXMPTpgNPages( currentSolrDocument.getPdfXMPTpgNPages() );
 		newSolrDocument.setDateCreated( currentSolrDocument.getDateCreated() );
-	
-		// TODO Daniel set these values, code similar in old version //NOTHING TO DO 
-		//protected Map<String, String> sessions;
-		//protected Map<String, String> agendas;
-	    
 		newSolrDocument.setBody( currentSolrDocument.getBody() );
 		newSolrDocument.setRequiresNewBody( checkBodyValidity(newSolrDocument) );
 
@@ -164,7 +160,8 @@ public class FileProcessor {
 	 */
 	private static SolrDocument processEmptyTitles(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
-		AppProp.database.insertWarning(newSolrDocument.getId(), "Empty Title");
+		if (newSolrDocument.getTitle().isEmpty())
+			AppProp.database.insertWarning(newSolrDocument.getId(), "Empty Title");
 		return newSolrDocument;
 	}
 	
@@ -175,7 +172,9 @@ public class FileProcessor {
 	 */
 	private static SolrDocument processFutureDates(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
-		Helper.logMessage(InfoType.Warning, newSolrDocument, "Future Date (" + newSolrDocument.getPublicationDate() + ")");
+		Date d = new Date();
+		if ( d.before( Helper.getTimestamp(newSolrDocument.getPublicationDate()) ) )
+			Helper.logMessage(InfoType.Warning, newSolrDocument, "Future Date (" + newSolrDocument.getPublicationDate() + ")");
 		return newSolrDocument;
 	}
 	

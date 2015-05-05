@@ -83,8 +83,16 @@ public class SolrDocument {
 						}
 					} else {
 						if (!field.get(this).equals("") && !field.get(this).equals("<![CDATA[]]>")) {
-							xml += "<field name=\"" + field.getName() + "\">"
-								+ field.get(this) + "</field>\n";
+							if (field.getName().toLowerCase().equals("url")) {
+								xml += "<field name=\"" + field.getName() + "\">"
+								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
+							} else if (field.getName().toLowerCase().contains("body")) {
+								xml += "<field name=\"" + field.getName() + "\">"
+								+ Helper.makeXMLTextSafe(field.get(this).toString()) + "</field>\n";
+							} else {
+								xml += "<field name=\"" + field.getName() + "\">"
+								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
+							}
 						}
 					}
 				}
