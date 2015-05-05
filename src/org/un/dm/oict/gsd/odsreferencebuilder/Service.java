@@ -5,6 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.un.dm.oict.gsd.odsreferencebuilder.Consumer.ConsumerRunType;
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
 
 /**
  * @author Kevin Thomas Bradley
@@ -46,8 +47,7 @@ public class Service {
 	        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
 	        new Thread(referenceConsumer).start();
 		} catch (Exception e) {
-			// TODO Kevin log/error generic method
-			System.out.println("ERROR: " + e.getMessage());
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
 		//AppProp.tempTesseractImgOutputDir = "dir";
 		//TextExtractorOCR.performCompleteOCR("pdfLoc" , "ar");

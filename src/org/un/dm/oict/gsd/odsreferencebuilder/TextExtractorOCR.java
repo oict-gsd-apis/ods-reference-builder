@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -31,12 +33,9 @@ public class TextExtractorOCR {
 	 * @param newSolrDocument
 	 * @return
 	 */
-	protected static String obtainText(SolrDocument newSolrDocument) { 
-		// Obtain the jobUrl of the Solr Document
-		String pdfUrl = newSolrDocument.getUrlJob();
-		
+	protected static String obtainText(SolrDocument newSolrDocument) { 		
 		// Call method and store the returning parsed body
-		String newBody = performCURLCommand(pdfUrl);
+		String newBody = performCURLCommand(newSolrDocument);
 		// Verify that the new body is not empty
 		if (newBody.length() > 0)
 			return newBody;
@@ -51,7 +50,8 @@ public class TextExtractorOCR {
 	 * @param pdfUrl
 	 * @return
 	 */
-	protected static String performCURLCommand(String pdfUrl) {
+	protected static String performCURLCommand(SolrDocument newSolrDocument) {
+		String pdfUrl = newSolrDocument.getUrlJob();
 		// Construct the cURL command
 		String[] command = { "curl",
 	            			"-T",
@@ -61,8 +61,8 @@ public class TextExtractorOCR {
 	            			"\"Accept: text/plain\""};
 		String body = performProcess(command);
 		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
-			// TODO Kevin log to process later as Tika was unable to obtain a good version
-			// could be automated to do performCompleteOCR
+			// IMPROVEMENT could be automated to do performCompleteOCR
+			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika");
 		}
 			
 		return body;
@@ -97,7 +97,7 @@ public class TextExtractorOCR {
 			while ((line = br.readLine()) != null) {
 				// Remove excess white space
 				if (line.length() > 0)
-					body += minimizeWhitespace(line);
+					body += Helper.minimizeWhitespace(line);
 				if (AppProp.debug)
 					System.out.println(line);
 			}
@@ -112,15 +112,6 @@ public class TextExtractorOCR {
         	return "";
         }
         return body;
-	}
-	
-	/**
-	 * This method is used to remove some of the whitespace in the body
-	 * @param val
-	 * @return
-	 */
-	private static String minimizeWhitespace(String val) {
-		return val.replaceAll("[\n\r]","") + "\n";
 	}
 	
 	/**
@@ -179,7 +170,7 @@ public class TextExtractorOCR {
 		try {
 			encoded = Files.readAllBytes(Paths.get(path));
 		} catch (IOException e) {
-			System.out.println("ERROR: " + e.getMessage());
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
 		return new String(encoded, encoding);
 	}

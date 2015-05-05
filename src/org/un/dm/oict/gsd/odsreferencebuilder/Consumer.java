@@ -3,6 +3,8 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -45,7 +47,7 @@ public class Consumer implements Runnable {
 			// blocking queues to have an initial document
 			Thread.sleep(3 * 1000);
 		} catch (InterruptedException e) {
-			System.out.println("ERROR: " + e.getMessage());
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
 		
 		if (runType.equals(ConsumerRunType.Solr)) { 
@@ -84,7 +86,7 @@ public class Consumer implements Runnable {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("ERROR: " + e.getMessage());
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}	
 	}
 	
@@ -102,7 +104,7 @@ public class Consumer implements Runnable {
 				System.out.println("(" + referenceFilesConsumed + ") Reference Document Consumed : " + currentReferenceDocument.getId());
 			}
 		} catch (Exception e) {
-			System.out.println("ERROR: " + e.getMessage());
+			Helper.logMessage(InfoType.Error, e.getMessage());
 		}		
 	}
 }

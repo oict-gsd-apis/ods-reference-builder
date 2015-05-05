@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
 /**
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
@@ -97,5 +99,36 @@ public class Helper {
 			}
 		}
 		return found;
+	}
+	
+	/**
+	 * This method is used to remove some of the whitespace in the body
+	 * @param val
+	 * @return
+	 */
+	protected static String minimizeWhitespace(String val) {
+		return val.replaceAll("[\n\r]","") + "\n";
+	}
+	
+	protected static boolean logMessage(InfoType type, String message) {
+		return logMessage(type, null, message);
+	}
+	
+	protected static boolean logMessage(InfoType type, SolrDocument newSolrDocument, String message) {
+		String msg = "";
+		if (type == InfoType.Info) {
+			msg += "INFO:";
+			msg += " Id (" + newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" + ") " + message;
+		} else if (type == InfoType.Warning) {
+			msg += "WARNING:";
+			msg += " Id (" + newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" + ") " + message;
+			AppProp.database.insertWarning(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET", msg);
+		} else if (type == InfoType.Error) {
+			msg += "ERROR:";
+			msg += " Id (" + newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" + ") " + message;
+			AppProp.database.insertError(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET", msg);
+		}
+		System.out.println(msg);
+		return true;
 	}
 }
