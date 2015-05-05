@@ -59,6 +59,8 @@ public class Service {
 		AppProp.log = Logger.getLogger(Service.class);
 
 		AppProp.invalidChars = new char[] {'\uFFFD','\uF02A'};
+		AppProp.debug = Boolean.parseBoolean(Helper.getProperty("debug"));
+		AppProp.tempTesseractImgOutputDir = Helper.getProperty("tempTesseractImgOutputDir");
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
 		AppProp.solrInstance = Helper.getProperty("solrInstance");
 		AppProp.solrCollection = Helper.getProperty("solrCollection");
