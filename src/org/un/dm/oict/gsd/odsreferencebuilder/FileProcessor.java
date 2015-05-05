@@ -74,6 +74,7 @@ public class FileProcessor {
 		newSolrDocument.setPdfXMPTpgNPages( currentSolrDocument.getPdfXMPTpgNPages() );
 		newSolrDocument.setDateCreated( currentSolrDocument.getDateCreated() );
 	
+		// TODO
 		//protected Map<String, String> sessions;
 		//protected Map<String, String> agendas;
 	    

@@ -69,6 +69,7 @@ public class Producer implements Runnable {
 						// Set both the currentSolrDocument and newSolrDocuments filename to be the same
 						currentSolrDocument.setFilename(currXmlFilename);
 						newSolrDocument.setFilename(currXmlFilename);
+						newReferenceDocument.setFilename(currXmlFilename);
 	
 						processSolrDocuments(currentSolrDocument, newSolrDocument);
 						processReferenceDocuments(newSolrDocument, newReferenceDocument);

@@ -53,7 +53,7 @@ public class ReferenceDocument {
 	
 	public String buildNewFilename() {
 		String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
-		return "/home/daniel/Desktop/testFiles/ref/" + tf;
+		return AppProp.referenceOutputFolder  + tf;
 	}
 	
 	public String getId() {

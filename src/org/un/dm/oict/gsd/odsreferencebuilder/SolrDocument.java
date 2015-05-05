@@ -83,7 +83,7 @@ public class SolrDocument {
 	
 	public String buildNewFilename() {
 		String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
-		return "/home/daniel/Desktop/testFiles/docs/" + tf; 
+		return AppProp.documentOutputFolder + tf; 
 	}
 
 	public String getId() {

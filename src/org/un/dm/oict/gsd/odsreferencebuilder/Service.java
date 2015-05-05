@@ -65,6 +65,8 @@ public class Service {
 		AppProp.debug = Boolean.parseBoolean(Helper.getProperty("debug"));
 		AppProp.tempTesseractImgOutputDir = Helper.getProperty("tempTesseractImgOutputDir");
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
+		AppProp.referenceOutputFolder = Helper.getProperty("referenceOutputFolder");
+		AppProp.documentOutputFolder = Helper.getProperty("documentOutputFolder");
 		AppProp.solrInstance = Helper.getProperty("solrInstance");
 		AppProp.solrCollection = Helper.getProperty("solrCollection");
 		AppProp.solrUsername = Helper.getProperty("solrUsername");
