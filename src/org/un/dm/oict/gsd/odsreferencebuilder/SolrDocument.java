@@ -51,6 +51,7 @@ public class SolrDocument {
 	
 	private boolean requiresNewBody;
 	
+	
 	@Override
 	/**
 	 * This overridden method is used to construct the Solr XML for the document

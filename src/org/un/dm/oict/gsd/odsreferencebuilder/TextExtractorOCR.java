@@ -161,7 +161,7 @@ public class TextExtractorOCR {
 		
 		try {
 			Files.delete(Paths.get(imgFile)); 
-			Files.delete(Paths.get(txtFile));
+			Files.delete(Paths.get(txtFile + ".txt"));
 		} catch (IOException e) {
 
 		} 
