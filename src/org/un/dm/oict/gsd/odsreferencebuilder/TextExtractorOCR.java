@@ -61,7 +61,7 @@ public class TextExtractorOCR {
 	            			"\"Accept: text/plain\""};
 		String body = performProcess(command);
 		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
-			// TODO log to process later as Tika was unable to obtain a good version
+			// TODO Kevin log to process later as Tika was unable to obtain a good version
 			// could be automated to do performCompleteOCR
 		}
 			
@@ -138,7 +138,6 @@ public class TextExtractorOCR {
 		String imgFile = AppProp.tempTesseractImgOutputDir + "" + tempId + ".tif";
 		String txtFile = AppProp.tempTesseractImgOutputDir + "" + tempId + "";
 		String lang = mapLanguageCode(languageCode);
-		// TODO Copy PDF locally
 		// Convert pdf to images in a specific folder
 		String[] command = { "gs",
         			"-dNOPAUSE",

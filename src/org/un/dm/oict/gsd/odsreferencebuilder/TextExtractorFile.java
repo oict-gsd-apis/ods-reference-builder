@@ -39,7 +39,7 @@ public class TextExtractorFile {
 		return currentSolrDocument;
 	}
 	
-	// TODO Expansion of business logic required
+	// TODO Daniel Expansion of business logic required
 	/**
 	 * 
 	 * @param currentSolrDocument

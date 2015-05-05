@@ -16,23 +16,20 @@ import java.util.regex.Pattern;
 public class FileProcessor {
 	
 	/**
-	 * 
+	 * This method is used to process the logic for each file
 	 * @param currentSolrDocument
 	 * @param newSolrDocument
 	 * @return
 	 */
 	protected static SolrDocument processFile(SolrDocument currentSolrDocument, SolrDocument newSolrDocument) {
-		
 		newSolrDocument = extractMapData(currentSolrDocument, newSolrDocument);
-
 		newSolrDocument = cleanseData(newSolrDocument);
-		
 		return newSolrDocument;
 	}
 	
-	// TODO Expansion of business logic required
 	/**
-	 * 
+	 * This method is used to map the existing solr document with the new one, which will
+	 * be transformed
 	 * @param currentSolrDocument
 	 * @param newSolrDocument
 	 * @return
@@ -74,7 +71,7 @@ public class FileProcessor {
 		newSolrDocument.setPdfXMPTpgNPages( currentSolrDocument.getPdfXMPTpgNPages() );
 		newSolrDocument.setDateCreated( currentSolrDocument.getDateCreated() );
 	
-		// TODO
+		// TODO Daniel set these values, code similar in old version
 		//protected Map<String, String> sessions;
 		//protected Map<String, String> agendas;
 	    
@@ -85,7 +82,8 @@ public class FileProcessor {
 	}
 	
 	/**
-	 * 
+	 * This method is used as a wrapper for the Helper method checkBodyContainsInvalidChars
+	 * which checks a text body for particular erroneous characters
 	 * @param newSolrDocument
 	 * @return
 	 */
@@ -93,9 +91,9 @@ public class FileProcessor {
 		return Helper.checkBodyContainsInvalidChars(newSolrDocument, AppProp.invalidChars);
 	}
 
-	// TODO add removal of breaklines regardless of whether a new body is extracted
+	// TODO Kevin add removal of breaklines regardless of whether a new body is extracted
 	/**
-	 * 
+	 * This method is used as a wrapper to cleanse the data
 	 * @param newSolrDocument
 	 * @return
 	 */
@@ -116,26 +114,27 @@ public class FileProcessor {
 		return newSolrDocument; 
 	}
 	
-	// TODO Extend functionality
 	/**
-	 * 
+	 * This method removes ? from particular fields
 	 * @param newSolrDocument
 	 * @return
 	 */
 	private static SolrDocument processQMarks(SolrDocument newSolrDocument) { 
 		String replaceChar = "?";
 		newSolrDocument.setId( newSolrDocument.getId().contains( replaceChar ) ? newSolrDocument.getId().replace( replaceChar , "") : newSolrDocument.getId() );
-		//newSolrDocument.setSymbol( newSolrDocument.getSymbol().contains( replaceChar ) ? newSolrDocument.getSymbol().replace( replaceChar , "") : newSolrDocument.getSymbol() );
-		/*alternativeSymbols
-		docType
-		size
-		session1
-		agenda1
-		urlJob
-		subjects
-		publicationDate
-		languageCode
-		dateCreated*/
+		newSolrDocument.setSymbol( newSolrDocument.getSymbol().contains( replaceChar ) ? newSolrDocument.getSymbol().replace( replaceChar , "") : newSolrDocument.getSymbol() );
+		newSolrDocument.setAlternativeSymbols( newSolrDocument.getAlternativeSymbols().contains( replaceChar ) ? newSolrDocument.getAlternativeSymbols().replace( replaceChar , "") : newSolrDocument.getAlternativeSymbols() );
+		newSolrDocument.setDocType( newSolrDocument.getDocType().contains( replaceChar ) ? newSolrDocument.getDocType().replace( replaceChar , "") : newSolrDocument.getDocType() );
+		newSolrDocument.setSize( newSolrDocument.getSize().contains( replaceChar ) ? newSolrDocument.getSize().replace( replaceChar , "") : newSolrDocument.getSize() );
+		//TODO Daniel Further session and agendas Daniel Extend functionality
+		newSolrDocument.setSession1( newSolrDocument.getSession1().contains( replaceChar ) ? newSolrDocument.getSession1().replace( replaceChar , "") : newSolrDocument.getSession1() );
+		newSolrDocument.setAgenda1( newSolrDocument.getAgenda1().contains( replaceChar ) ? newSolrDocument.getAgenda1().replace( replaceChar , "") : newSolrDocument.getAgenda1() );
+		newSolrDocument.setUrlJob( newSolrDocument.getUrlJob().contains( replaceChar ) ? newSolrDocument.getUrlJob().replace( replaceChar , "") : newSolrDocument.getUrlJob() );
+		newSolrDocument.setSubjects( newSolrDocument.getSubjects().contains( replaceChar ) ? newSolrDocument.getSubjects().replace( replaceChar , "") : newSolrDocument.getSubjects() );
+		newSolrDocument.setPublicationDate( newSolrDocument.getPublicationDate().contains( replaceChar ) ? newSolrDocument.getPublicationDate().replace( replaceChar , "") : newSolrDocument.getPublicationDate() );
+		newSolrDocument.setLanguageCode( newSolrDocument.getLanguageCode().contains( replaceChar ) ? newSolrDocument.getLanguageCode().replace( replaceChar , "") : newSolrDocument.getLanguageCode() );
+		newSolrDocument.setDateCreated( newSolrDocument.getDateCreated().contains( replaceChar ) ? newSolrDocument.getDateCreated().replace( replaceChar , "") : newSolrDocument.getDateCreated() );
+
 		return newSolrDocument;
 	}
 	
@@ -148,7 +147,7 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
-	// TODO Implement logic
+	// TODO Kevin Implement logic
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -159,7 +158,7 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
-	// TODO Implement logic
+	// TODO Kevin Implement logic
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -170,7 +169,6 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
-	// TODO Identify problematic characters
 	/**
 	 * 
 	 * @param newSolrDocument
@@ -203,8 +201,7 @@ public class FileProcessor {
 		return newSolrDocument;
 	}
 	
-	// TODO Expansion of business logic required
-	// TODO Counts per reference
+	// TODO Kevin Expansion of business logic required & Counts per reference
 	/**
 	 * 
 	 * @param newSolrDocument

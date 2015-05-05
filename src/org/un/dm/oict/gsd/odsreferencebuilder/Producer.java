@@ -100,7 +100,7 @@ public class Producer implements Runnable {
 	 */
 	private void processReferenceDocuments(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) {
 		// Extract references for all Symbol variations
-		// TODO Test references, there seems to be a lost of noise, code below shows output
+		// TODO Daniel Test references, there seems to be a lost of noise, code below shows output
 		newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
 		processedReferenceDocuments.add(newReferenceDocument);
 		referenceFilesProduced++;

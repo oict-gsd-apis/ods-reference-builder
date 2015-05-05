@@ -66,16 +66,11 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	
 	@Override
 	/**
-	 * This is an abstraction method used to insert a SolrDocument
-	 * @param newSolrDocument
-	 * @param folder
-	 * @return
+	 * 
 	 */
-	protected boolean insertReferenceDocument(SolrDocument newSolrDocument) {
-		return insertDocument("Document", newSolrDocument.getId(), newSolrDocument.getSymbol(),  newSolrDocument.getLanguageCode(), newSolrDocument.getTitle(), newSolrDocument.getFilename().substring(0,newSolrDocument.getFilename().lastIndexOf("/")+1), newSolrDocument.getFilename().substring(newSolrDocument.getFilename().lastIndexOf("/")+1, newSolrDocument.getFilename().length()));
+	protected boolean insertReferenceDocument(ReferenceDocument newReferenceDocument) {
+		return insertDocument("Reference", newReferenceDocument.getId(), newReferenceDocument.getSymbol(),  newReferenceDocument.getLanguageCode(), newReferenceDocument.getTitle(), newReferenceDocument.getFilename().substring(0,newReferenceDocument.getFilename().lastIndexOf("/")+1), newReferenceDocument.getFilename().substring(newReferenceDocument.getFilename().lastIndexOf("/")+1, newReferenceDocument.getFilename().length()));
 	}
-	
-	// TODO Reference method insertReferenceDocument
 	
 	@Override
 	/**
@@ -110,8 +105,8 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 		}
 	}
 	
-	// TODO Warning method
-	// TODO Error method
+	// TODO Kevin Warning method
+	// TODO Daniel Error method
 	
 	@Override
 	/**

@@ -23,5 +23,5 @@ public abstract class OutputDatabase {
 	
 	abstract boolean insertSolrDocument(SolrDocument newSolrDocument);
 	
-	abstract boolean insertReferenceDocument(SolrDocument newSolrDocument);
+	abstract boolean insertReferenceDocument(ReferenceDocument newReferenceDocument) ;
 }
