@@ -110,7 +110,8 @@ public class FileProcessor {
 		// Check body contains relevant text
 		newSolrDocument = processBodyText(newSolrDocument);
 		// Remove whitespace from body
-		newSolrDocument.setBody(Helper.minimizeWhitespace(newSolrDocument.getBody()));
+		//TODO DANIEL commented this line due to performance issues when opening the file 
+		//newSolrDocument.setBody(Helper.minimizeWhitespace(newSolrDocument.getBody()));
 			
 		return newSolrDocument; 
 	}
@@ -189,9 +190,11 @@ public class FileProcessor {
 	 * @return
 	 */
 	private static SolrDocument processBodyText(SolrDocument newSolrDocument) { 
-		String body = newSolrDocument.getBody();
+		//String body = newSolrDocument.getBody();
 		// If bodies text is insufficient call Tika/OCR server and obtain new body
-		if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
+		//if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
+		if (newSolrDocument.getRequiresNewBody()) {
+			Helper.logMessage(InfoType.Warning, newSolrDocument, "newBody Required");
 			String newBody = TextExtractorOCR.obtainText(newSolrDocument);
 			if (!newBody.isEmpty()) 
 				newSolrDocument.setBody( newBody );
@@ -223,24 +226,12 @@ public class FileProcessor {
 	 * @return
 	 */
 	protected static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
-//	    String body = newSolrDocument.getBody();
-//	    String regex = AppProp.referenceRegex;
-//	    List<String> refs = new ArrayList<String>();
-//		Pattern pattern = Pattern.compile("([A-Z]+[\\-\\./\\(\\)]([A-Z]+|[0-9]+)[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*([A-Z]+|[0-9]+|[a-z]+))");//Pattern.compile(regex);
-//	    Matcher matcher = pattern.matcher(body);
-//		while (matcher.find()) {
-//			String potentialMatch = matcher.group();
-//			if (potentialMatch.indexOf("/") > 0) {
-//				if (!refs.contains(potentialMatch))
-//					refs.add(potentialMatch);
-//			}
-//		}
 		String body = newSolrDocument.getBody();
 		String regex = AppProp.referenceRegex;;
 	    Map<String, Integer> refs = new HashMap<String, Integer>();
 	    Pattern pattern = Pattern.compile(regex);//Pattern.compile("([A-Z]+[\\-\\./\\(\\)]([A-Z]+|[0-9]+)\\w+[\\-\\./\\(\\)]\\w+[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*)");
 	    Matcher matcher = pattern.matcher(body);
-	    int count = 0;
+	    //int count = 0;
 		while (matcher.find()) {
 			String potentialMatch = matcher.group();
 			if (potentialMatch.indexOf("/") > 0) {
@@ -267,7 +258,7 @@ public class FileProcessor {
 				} else{
 					refs.put(pm, refs.get(pm)+1);	
 				}
-				count++;
+				//count++;
 			}
 		}
 		

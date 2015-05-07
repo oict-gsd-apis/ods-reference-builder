@@ -5,14 +5,17 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 //import java.io.IOException;
 //import java.io.InputStream;
 //import java.net.URL;
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 //import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,25 +94,29 @@ public class Helper {
 	 */
 	static boolean checkBodyContainsInvalidChars(SolrDocument newSolrDocument, char[] invalidChars) {
 		String body = newSolrDocument.getBody();
+		if (body.isEmpty() || body.length() < 1) {
+			return true;
+		}
 		return checkBodyContainsInvalidChars(body, invalidChars);
 	}
 	
 	/**
 	 * 
 	 * @param body
-	 * @param invalidChars
 	 * @return
 	 */
+	//TODO check how to pass more than one UNICODE value and how to implement them on regex
 	static boolean checkBodyContainsInvalidChars(String body, char[] invalidChars) {
 		boolean found = false;
-		for(char c : invalidChars) {
-			if (body.contains(Character.toString(c))){
-				found =  true;
-				break; //once one of the characters is found breaks the loop 
-			}
-		}
+	    Pattern pattern = Pattern.compile("\uFFFD");
+	    Matcher matcher = pattern.matcher(body);
+		while (matcher.find()) {
+			System.out.println("Invalid character found");
+			found = true;
+			break;
+		}		
 		return found;
-	}
+	}	
 	
 	/**
 	 * This method is used to remove some of the whitespace in the body
@@ -281,6 +288,12 @@ public class Helper {
         return index;
     }
     
+    /**
+     * 
+     * @param str
+     * @param findChar
+     * @return
+     */
     static int getCountChar(String str, String findChar) {
     	int lastIndex = 0;
     	int count  = 0;
@@ -292,6 +305,35 @@ public class Helper {
     		}
     	}
     	return count;
+    }
+    
+    /**
+     * 
+     * @param folderName
+     */
+    static void createOutputFolders(String folderName)
+    {
+    	//Verify if the directory exists 
+		 File theDocDir = new File(AppProp.documentOutputFolder + "/" + folderName);
+		 File theRefDir = new File(AppProp.referenceOutputFolder + "/" + folderName);
+		 createDirectory(theDocDir);
+		 createDirectory(theRefDir);
+    }
+    
+    /**
+     * 
+     * @param folderPath
+     */
+    static void createDirectory(File folderPath){
+    	if (!folderPath.exists()) {
+		    try{
+		    	folderPath.mkdir();
+		    	System.out.println("Directory created succesfully");
+		     } catch(SecurityException se){
+		        //handle it
+		    	 System.out.println("An error occurred while creating the directory " + se.getMessage());
+		     }		    	 
+		  }
     }
 //   
 //	    

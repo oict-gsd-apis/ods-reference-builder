@@ -1,6 +1,9 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,8 +11,15 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import org.apache.tika.Tika;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.sax.BodyContentHandler;
 import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
 
 /**
@@ -35,11 +45,11 @@ public class TextExtractorOCR {
 	 */
 	protected static String obtainText(SolrDocument newSolrDocument) { 		
 		// Call method and store the returning parsed body
-//		String newBody = performCURLCommand(newSolrDocument);
-//		// Verify that the new body is not empty
-//		if (newBody.length() > 0)
-//			return newBody;
-//		else
+		String newBody = performCURLCommand(newSolrDocument);
+		// Verify that the new body is not empty
+		if (newBody.length() > 0)
+			return newBody;
+		else
 			return "";
 	}
 	
@@ -52,15 +62,18 @@ public class TextExtractorOCR {
 	 */
 	protected static String performCURLCommand(SolrDocument newSolrDocument) {
 		String pdfUrl = newSolrDocument.getUrlJob();
-		pdfUrl = pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/DATA/" + pdfUrl;
+		//pdfUrl = pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/DATA/" + pdfUrl;
+		//TODO DANIEL is using this path to find the requested PDF's 
+		pdfUrl = "/home/daniel/Desktop/testFiles/pdfs/" + pdfUrl.substring(pdfUrl.lastIndexOf("/")+1,pdfUrl.length() ).toUpperCase();
 		// Construct the cURL command
 		String[] command = { "curl",
 	            			"-T",
 	            			pdfUrl,
-	            			"http://frankie:9998/tika",
+	            			"http://localhost:9998/tika",
 	            			"--header",
 	            			"\"Accept: text/plain\""};
-		String body = performProcess(command);
+		//String body = performProcess(command);
+		String body = extractorTika(new File (pdfUrl));
 		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
 			// IMPROVEMENT could be automated to do performCompleteOCR
 			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika - Attempting to fix with full OCR");
@@ -69,6 +82,39 @@ public class TextExtractorOCR {
 			
 		return body;
 	}
+	
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
+	protected static String extractorTika (File file) {
+		try {
+			InputStream is = new FileInputStream(file);
+			Metadata metadata = new Metadata();
+			BodyContentHandler ch = new BodyContentHandler(1000000000);
+			AutoDetectParser parser = new AutoDetectParser();
+			// Identify the mime type
+			String mimeType = new Tika().detect(file);
+			//String mimeType = "application/pdf";
+			metadata.set(Metadata.CONTENT_TYPE, mimeType); 
+			// Use the parser to extract the data
+			parser.parse(is, ch, metadata, new ParseContext());
+			// Close the is
+			is.close();
+			// Extract the fulltext
+			String fullText = ch.toString(); 
+			return fullText;
+		}
+		catch (FileNotFoundException enf){			
+			return null;
+		}
+		catch (Exception e) {	
+			return null;
+		}
+
+	}
+	
 	
 	/**
 	 * This is a generic method used to perform a process using
@@ -99,7 +145,7 @@ public class TextExtractorOCR {
 			while ((line = br.readLine()) != null) {
 				// Remove excess white space
 				if (line.length() > 0)
-					body += Helper.minimizeWhitespace(line);
+					body +=  line;//Helper.minimizeWhitespace(line);
 				if (AppProp.debug)
 					System.out.println(line);
 			}
@@ -131,6 +177,7 @@ public class TextExtractorOCR {
 		String imgFile = AppProp.tempTesseractImgOutputDir + "" + tempId + ".tif";
 		String txtFile = AppProp.tempTesseractImgOutputDir + "" + tempId + "";
 		String lang = mapLanguageCode(languageCode);
+		
 		// Convert pdf to images in a specific folder
 		String[] command = { "gs",
         			"-dNOPAUSE",
@@ -148,7 +195,6 @@ public class TextExtractorOCR {
     			"-l",
     			lang};
 		performProcess(command2);
-		
 		// Read the contents of this file and store in a variable
 		String body = readFile(txtFile + ".txt", StandardCharsets.UTF_8);
 		
@@ -195,7 +241,7 @@ public class TextExtractorOCR {
 		else if (languageCode.equals("ru"))
 			return "rus";
 		else if (languageCode.equals("zh-cn"))
-			return "chi_sim";
+			return "chi-sim";
 		else
 			return "eng";
 	}

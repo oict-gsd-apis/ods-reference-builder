@@ -44,7 +44,7 @@ public class ReferenceDocument {
 	 */
 	public String toString() {
 		try {
-			String xml = "<add>\n<doc>\n";
+			String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><add>\n<doc>\n";
 			for (Field field : this.getClass().getDeclaredFields()) {
 				if (field.get(this) != null) {
 					if (field.getType().isAssignableFrom(Map.class)) {
@@ -84,7 +84,9 @@ public class ReferenceDocument {
 	public String buildNewFilename() {
 		try {
 			String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
-			return AppProp.referenceOutputFolder  + tf;
+			String cP = this.filename.substring(0,this.filename.lastIndexOf("/"));
+			String fn = this.filename.substring( cP.lastIndexOf("/")+1, cP.length());
+			return AppProp.referenceOutputFolder + "/" + fn + "/" + tf; 
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
 			return "";

@@ -38,7 +38,6 @@ public class TextExtractorFile {
 		return currentSolrDocument;
 	}
 	
-	// TODO Daniel Expansion of business logic required  //NOTHING TO DO
 	/**
 	 * 
 	 * @param currentSolrDocument
@@ -56,8 +55,7 @@ public class TextExtractorFile {
 		currentSolrDocument.setSession1( getXmlElement(doc, "session1") );
 		currentSolrDocument.setSession2( getXmlElement(doc, "session2") );
 		currentSolrDocument.setSession3( getXmlElement(doc, "session3") );
-		currentSolrDocument.setAlternativeSymbols( getXmlElement(doc, "alternativeSymbols") );
-		currentSolrDocument.setTitle( getXmlElement(doc, "title") );
+		currentSolrDocument.setAlternativeSymbols( getXmlElement(doc, "alternativeSymbols") );		
 		currentSolrDocument.setDocType( getXmlElement(doc, "docType") );
 		currentSolrDocument.setSize( getXmlElement(doc, "size") );
 		currentSolrDocument.setUrlJob( getXmlElement(doc, "urlJob") );
@@ -80,28 +78,42 @@ public class TextExtractorFile {
 		currentSolrDocument.setPdfXMPCreatorTool( getXmlElement(doc, "pdfXMPCreatorTool") );
 		currentSolrDocument.setPdfXMPTpgNPages( getXmlElement(doc, "pdfXMPTpgNPages") );
 		currentSolrDocument.setDateCreated( getXmlElement(doc, "dateCreated") );
-	
-		//protected Map<String, String> sessions;
-		//protected Map<String, String> agendas;
 	    
-	    if (currentSolrDocument.getLanguageCode().equals("en"))
+	    if (currentSolrDocument.getLanguageCode().equals("en")){
+	    	currentSolrDocument.setTitle( getXmlElement(doc, "title_en") );
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_en") );
-	    else if (currentSolrDocument.getLanguageCode().equals("fr"))
+	    }
+	    else if (currentSolrDocument.getLanguageCode().equals("fr")){
+	    	currentSolrDocument.setTitle( getXmlElement(doc, "title_fr") );
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_fr") );
-	    else if (currentSolrDocument.getLanguageCode().equals("es"))
+	    }
+	    else if (currentSolrDocument.getLanguageCode().equals("es")){
+	    	currentSolrDocument.setTitle( getXmlElement(doc, "title_es") );
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_es") );
-	    else if (currentSolrDocument.getLanguageCode().equals("ar"))
+	    }
+	    else if (currentSolrDocument.getLanguageCode().equals("ar")){
+	    	currentSolrDocument.setTitle( getXmlElement(doc, "title_ar") );
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_ar") );
-	    else if (currentSolrDocument.getLanguageCode().equals("ru"))
+	    }
+	    else if (currentSolrDocument.getLanguageCode().equals("ru")){
+	    	currentSolrDocument.setTitle( getXmlElement(doc, "title_ru") );
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_ru") );
-	    else if (currentSolrDocument.getLanguageCode().equals("zh-cn"))
+	    }
+	    else if (currentSolrDocument.getLanguageCode().equals("zh-cn")){
+	    	currentSolrDocument.setTitle( getXmlElement(doc, "title_zh-cn") );
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_zh-cn") );
-	    else if (currentSolrDocument.getLanguageCode().equals("other")) {
+	    }
+	    else if (currentSolrDocument.getLanguageCode().equals("other")) {	    	
 	    	String body = getXmlElement(doc, "body_other");
+	    	String title = getXmlElement(doc, "title_other") ;
 	    	if (body.isEmpty()) {
 	    		body = getXmlElement(doc, "body_en");
 	    	}
+	    	if (title.isEmpty()) {
+	    		title= getXmlElement(doc, "title_en");
+	    	}
 	    	currentSolrDocument.setBody( body );
+	    	currentSolrDocument.setTitle( title );
 	    }
 	    return currentSolrDocument;
 	    

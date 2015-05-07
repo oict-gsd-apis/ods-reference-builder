@@ -75,6 +75,9 @@ public class Producer implements Runnable {
 							newReferenceDocument.setFilename(currXmlFilename);
 		
 							System.out.println("INFO: Beginning to process - " + currXmlFilename);
+							//Create the Folder
+							 Helper.createOutputFolders( child.getParent().substring(child.getParent().lastIndexOf("/") + 1, child.getParent().length()));
+	
 							processSolrDocuments(currentSolrDocument, newSolrDocument);
 							processReferenceDocuments(newSolrDocument, newReferenceDocument);
 						} catch (Exception e) {
