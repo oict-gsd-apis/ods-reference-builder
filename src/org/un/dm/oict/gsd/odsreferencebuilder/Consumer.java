@@ -45,7 +45,9 @@ public class Consumer implements Runnable {
 		try {
 			// Sleep X seconds, allowing enough time for both
 			// blocking queues to have an initial document
+			System.out.println("INFO: Consumer (" + runType + ") Waiting");
 			Thread.sleep(30 * 1000);
+			
 		} catch (InterruptedException e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
@@ -53,6 +55,7 @@ public class Consumer implements Runnable {
 		if (runType.equals(ConsumerRunType.Solr)) { 
 			// Process Solr Documents
 	    	if (processedSolrDocuments.size() > 0) {
+	    		System.out.println("INFO: Consumer (" + runType + ") Started");
 	    		processSolrDocuments();
 	    	} 
 		}
@@ -60,6 +63,7 @@ public class Consumer implements Runnable {
 		if (runType.equals(ConsumerRunType.Reference)) {
 	    	// Process Reference Documents
 	    	if (processedReferenceDocuments.size() > 0) {
+	    		System.out.println("INFO: Consumer (" + runType + ") Started");
 	    		processReferenceDocuments();
 	    	} 
 		}

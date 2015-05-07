@@ -96,7 +96,13 @@ public class TextExtractorFile {
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_ru") );
 	    else if (currentSolrDocument.getLanguageCode().equals("zh-cn"))
 	    	currentSolrDocument.setBody( getXmlElement(doc, "body_zh-cn") );
-	    
+	    else if (currentSolrDocument.getLanguageCode().equals("other")) {
+	    	String body = getXmlElement(doc, "body_other");
+	    	if (body.isEmpty()) {
+	    		body = getXmlElement(doc, "body_en");
+	    	}
+	    	currentSolrDocument.setBody( body );
+	    }
 	    return currentSolrDocument;
 	    
 	}

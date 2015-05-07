@@ -2,7 +2,11 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -123,7 +127,6 @@ public class FileProcessor {
 		newSolrDocument.setAlternativeSymbols( newSolrDocument.getAlternativeSymbols().contains( replaceChar ) ? newSolrDocument.getAlternativeSymbols().replace( replaceChar , "") : newSolrDocument.getAlternativeSymbols() );
 		newSolrDocument.setDocType( newSolrDocument.getDocType().contains( replaceChar ) ? newSolrDocument.getDocType().replace( replaceChar , "") : newSolrDocument.getDocType() );
 		newSolrDocument.setSize( newSolrDocument.getSize().contains( replaceChar ) ? newSolrDocument.getSize().replace( replaceChar , "") : newSolrDocument.getSize() );
-		//TODO Daniel Further session and agendas Daniel Extend functionality //DONE
 		newSolrDocument.setSession1( newSolrDocument.getSession1().contains( replaceChar ) ? newSolrDocument.getSession1().replace( replaceChar , "") : newSolrDocument.getSession1() );
 		newSolrDocument.setSession2( newSolrDocument.getSession2().contains( replaceChar ) ? newSolrDocument.getSession2().replace( replaceChar , "") : newSolrDocument.getSession2() );
 		newSolrDocument.setSession3( newSolrDocument.getSession3().contains( replaceChar ) ? newSolrDocument.getSession3().replace( replaceChar , "") : newSolrDocument.getSession3() );
@@ -148,6 +151,8 @@ public class FileProcessor {
 		String url = newSolrDocument.getUrl().toUpperCase();
 		String symbol = newSolrDocument.getSymbol().toUpperCase();
 		if (!url.contains(symbol)) {
+			String newUrl = url.substring(0, url.indexOf("DS=")+3) + symbol + url.substring(url.indexOf("DS=")+3, url.length());
+			newSolrDocument.setUrl(newUrl);
 			Helper.logMessage(InfoType.Error, newSolrDocument, "Symbol not in URL");
 		}
 		return newSolrDocument;
@@ -218,18 +223,58 @@ public class FileProcessor {
 	 * @return
 	 */
 	protected static ReferenceDocument extractReferences(SolrDocument newSolrDocument, ReferenceDocument newReferenceDocument) { 
-	    String body = newSolrDocument.getBody();
-	    String regex = AppProp.referenceRegex;
-	    List<String> refs = new ArrayList<String>();
-		Pattern pattern = Pattern.compile(regex);
+//	    String body = newSolrDocument.getBody();
+//	    String regex = AppProp.referenceRegex;
+//	    List<String> refs = new ArrayList<String>();
+//		Pattern pattern = Pattern.compile("([A-Z]+[\\-\\./\\(\\)]([A-Z]+|[0-9]+)[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*([A-Z]+|[0-9]+|[a-z]+))");//Pattern.compile(regex);
+//	    Matcher matcher = pattern.matcher(body);
+//		while (matcher.find()) {
+//			String potentialMatch = matcher.group();
+//			if (potentialMatch.indexOf("/") > 0) {
+//				if (!refs.contains(potentialMatch))
+//					refs.add(potentialMatch);
+//			}
+//		}
+		String body = newSolrDocument.getBody();
+		String regex = AppProp.referenceRegex;;
+	    Map<String, Integer> refs = new HashMap<String, Integer>();
+	    Pattern pattern = Pattern.compile(regex);//Pattern.compile("([A-Z]+[\\-\\./\\(\\)]([A-Z]+|[0-9]+)\\w+[\\-\\./\\(\\)]\\w+[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*[\\-\\./\\(\\)]*\\w*)");
 	    Matcher matcher = pattern.matcher(body);
+	    int count = 0;
 		while (matcher.find()) {
 			String potentialMatch = matcher.group();
 			if (potentialMatch.indexOf("/") > 0) {
-				if (!refs.contains(potentialMatch))
-					refs.add(potentialMatch);
+				if (potentialMatch.endsWith(".")) {
+					potentialMatch = potentialMatch.substring(0, potentialMatch.length()-1);
+				}
+				int leftCharCount = Helper.getCountChar(potentialMatch, "(");
+				int rightCharCount = Helper.getCountChar(potentialMatch, ")");
+				if (leftCharCount != rightCharCount) {
+					String leftPart = "";
+					String rightPart = "";
+					if (leftCharCount > rightCharCount) {
+						leftPart = potentialMatch.substring(0, potentialMatch.lastIndexOf("("));
+						rightPart = potentialMatch.substring(potentialMatch.lastIndexOf("(")+1, potentialMatch.length());
+					} else {
+						leftPart = potentialMatch.substring(0, potentialMatch.lastIndexOf(")"));
+						rightPart = potentialMatch.substring(potentialMatch.lastIndexOf(")")+1, potentialMatch.length());
+					}
+					potentialMatch = leftPart + rightPart;
+				}
+				String pm = potentialMatch.trim();
+				if (!refs.containsKey(pm)) {
+					refs.put(pm, 1);
+				} else{
+					refs.put(pm, refs.get(pm)+1);	
+				}
+				count++;
 			}
 		}
+		
+	    CountComparator cc =  new CountComparator(refs);
+	    TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(cc);
+	    sorted_map.putAll(refs);
+		 
 		newReferenceDocument.setId( newSolrDocument.getId() );
 		newReferenceDocument.setSymbol( newSolrDocument.getSymbol() );
 		newReferenceDocument.setTitle( newSolrDocument.getTitle() );
@@ -240,7 +285,7 @@ public class FileProcessor {
 		newReferenceDocument.setUrl( newSolrDocument.getUrl() );
 		newReferenceDocument.setLanguageCode( newSolrDocument.getLanguageCode() );
 		newReferenceDocument.setDateCreated( newSolrDocument.getDateCreated() );
-		newReferenceDocument.setReferences( refs );		
+		newReferenceDocument.setReferences( sorted_map );		
 		
 		return newReferenceDocument;
 	}

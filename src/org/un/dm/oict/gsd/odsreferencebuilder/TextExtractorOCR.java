@@ -21,7 +21,7 @@ import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
  * 
  * Tesseract & Ghostscript should ideally be installed:
  * sudo apt-get install ghostscript
- * sudo apt-get install tesseract-ocr tesseract-ocr-eng tesseract-ocr-fre tesseract-ocr-spa tesseract-ocr-ara tesseract-ocr-rus tesseract-ocr-chi_sim
+ * sudo apt-get install tesseract-ocr tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-spa tesseract-ocr-ara tesseract-ocr-rus tesseract-ocr-chi-sim
  */
 public class TextExtractorOCR {
 
@@ -35,11 +35,11 @@ public class TextExtractorOCR {
 	 */
 	protected static String obtainText(SolrDocument newSolrDocument) { 		
 		// Call method and store the returning parsed body
-		String newBody = performCURLCommand(newSolrDocument);
-		// Verify that the new body is not empty
-		if (newBody.length() > 0)
-			return newBody;
-		else
+//		String newBody = performCURLCommand(newSolrDocument);
+//		// Verify that the new body is not empty
+//		if (newBody.length() > 0)
+//			return newBody;
+//		else
 			return "";
 	}
 	
@@ -64,7 +64,7 @@ public class TextExtractorOCR {
 		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
 			// IMPROVEMENT could be automated to do performCompleteOCR
 			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika - Attempting to fix with full OCR");
-			body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
+			//body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
 		}
 			
 		return body;

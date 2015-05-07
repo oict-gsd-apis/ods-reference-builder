@@ -2,6 +2,7 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class ReferenceDocument {
 	private String languageCode;
 	private String dateCreated;
 	// Multi-valued Solr Field
-	private List<String> references;
+	private Map<String,Integer> references;
 	
 	private String filename;
 	
@@ -32,7 +33,7 @@ public class ReferenceDocument {
 	 * 
 	 */
 	public ReferenceDocument() {
-		this.references = new ArrayList<String>();
+		this.references = new HashMap<String, Integer>();
 	}
 	
 	@Override
@@ -47,11 +48,11 @@ public class ReferenceDocument {
 			for (Field field : this.getClass().getDeclaredFields()) {
 				if (field.get(this) != null) {
 					if (field.getType().isAssignableFrom(Map.class)) {
-						Map<String, String> vals = ((Map<String, String>) field.get(this));
-						for (Map.Entry<String, String> kv : vals.entrySet()) {
-							if (!kv.getValue().isEmpty())
-								xml += "<field name=\"" + kv.getKey() + "\">"
-										+ Helper.makeXMLTextSafeField(kv.getValue()) + "</field>\n";
+						Map<String, Integer> vals = ((Map<String, Integer>) field.get(this));
+						for (Map.Entry<String, Integer> kv : vals.entrySet()) {
+							if (kv.getValue() != 0)
+								xml += "<field name=\"reference\">"// + kv.getKey() + "\">"
+										+ Helper.makeXMLTextSafeField(  kv.getKey() + " [" + kv.getValue().toString() + "]" ) + "</field>\n";
 						}
 					}else if (field.getType().isAssignableFrom(List.class)) {
 						List<String> vals = ((ArrayList<String>) field.get(this));
@@ -64,7 +65,7 @@ public class ReferenceDocument {
 						if (!field.get(this).equals("") && !field.get(this).equals("<![CDATA[]]>")) {
 							if (field.getName().toLowerCase().equals("url")) {
 								xml += "<field name=\"" + field.getName() + "\">"
-								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
+								+ Helper.makeXMLTextSafeUrl(field.get(this).toString()) + "</field>\n";
 							} else {
 								xml += "<field name=\"" + field.getName() + "\">"
 								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
@@ -132,14 +133,14 @@ public class ReferenceDocument {
 	public void setDateCreated(String dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-	public List<String> getReferences() {
+	public Map<String, Integer> getReferences() {
 		return references;
 	}
-	public void setReferences(List<String> references) {
+	public void setReferences(Map<String, Integer> references) {
 		this.references = references;
 	}
-	public void addReference(String reference) {
-		this.references.add(reference);
+	public void addReference(String reference, int count) {
+		this.references.put(reference, count);
 	}
 	public String getFilename() {
 		return filename;

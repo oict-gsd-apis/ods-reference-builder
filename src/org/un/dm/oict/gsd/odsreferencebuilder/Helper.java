@@ -8,7 +8,9 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Map;
 //import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -277,6 +279,19 @@ public class Helper {
 	        } 
         }
         return index;
+    }
+    
+    static int getCountChar(String str, String findChar) {
+    	int lastIndex = 0;
+    	int count  = 0;
+    	while(lastIndex != -1) {
+    		lastIndex = str.indexOf(findChar, lastIndex);
+    		if (lastIndex != -1) {
+    			count++;
+    			lastIndex += findChar.length();
+    		}
+    	}
+    	return count;
     }
 //   
 //	    
@@ -615,4 +630,20 @@ public class Helper {
 		return "<![CDATA[" + text.replace("<", "").replace(">", "").replace("\\n", "").replace("\\r", "") + "]]>";
 	}
 	
+}
+
+class CountComparator implements Comparator<String> {
+
+    Map<String, Integer> base;
+    public CountComparator(Map<String, Integer> base) {
+        this.base = base;
+    }
+  
+    public int compare(String a, String b) {
+        if (base.get(a) >= base.get(b)) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 }

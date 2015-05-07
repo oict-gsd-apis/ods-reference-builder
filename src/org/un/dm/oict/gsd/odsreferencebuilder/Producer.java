@@ -37,6 +37,7 @@ public class Producer implements Runnable {
 	 */
 	public void run() {
 		// Start the process
+		System.out.println("INFO: Producer Started");
 		iterateFiles(AppProp.rootFileDirectory);	
 	}
 	
@@ -73,6 +74,7 @@ public class Producer implements Runnable {
 							newSolrDocument.setFilename(currXmlFilename);
 							newReferenceDocument.setFilename(currXmlFilename);
 		
+							System.out.println("INFO: Beginning to process - " + currXmlFilename);
 							processSolrDocuments(currentSolrDocument, newSolrDocument);
 							processReferenceDocuments(newSolrDocument, newReferenceDocument);
 						} catch (Exception e) {

@@ -36,6 +36,7 @@ public class Service {
 		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
 	
 		// Initialize the config file, log file and set the variables
+		System.out.println("INFO: Variables initialized");
 		initializeVariables();
 		
 		try { 	

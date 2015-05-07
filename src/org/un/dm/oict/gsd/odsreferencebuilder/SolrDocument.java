@@ -85,10 +85,10 @@ public class SolrDocument {
 						if (!field.get(this).equals("") && !field.get(this).equals("<![CDATA[]]>")) {
 							if (field.getName().toLowerCase().equals("url")) {
 								xml += "<field name=\"" + field.getName() + "\">"
-								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
+								+ Helper.makeXMLTextSafeUrl(field.get(this).toString()) + "</field>\n";
 							} else if (field.getName().toLowerCase().contains("body")) {
-								xml += "<field name=\"" + field.getName() + "\">"
-								+ Helper.makeXMLTextSafe(field.get(this).toString()) + "</field>\n";
+								xml += "<field name=\"" + field.getName() + "\">" + field.get(this).toString() + "</field>\n";
+								//+ Helper.makeXMLTextSafe(field.get(this).toString()) + "</field>\n";
 							} else {
 								xml += "<field name=\"" + field.getName() + "\">"
 								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
