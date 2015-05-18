@@ -118,8 +118,8 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param text
 	 * @return
 	 */
-	protected boolean insertWarning(String documentId, String text) {
-		return insertProblem(InfoType.Warning, documentId, text);
+	protected boolean insertWarning(String documentId,String fileName, String text) {
+		return insertProblem(InfoType.Warning, documentId,  fileName.substring(fileName.lastIndexOf("/")+1, fileName.length()) , text);
 	}
 	
 	@Override
@@ -129,20 +129,21 @@ public class OutputDatabaseMSSQL extends OutputDatabase {
 	 * @param text
 	 * @return
 	 */
-	protected boolean insertError(String documentId, String text) {
-		return insertProblem(InfoType.Error, documentId, text);
+	protected boolean insertError(String documentId, String fileName, String text) {
+		return insertProblem(InfoType.Error, documentId,  fileName.substring(fileName.lastIndexOf("/")+1, fileName.length()) , text);
 	}
 	
 	@Override
 	/**
 	 * This method like insertDocument is used to build the query string, assigning parameters and calling runQuery
 	 */
-	protected boolean insertProblem(InfoType problemType, String documentId, String text) {
+	protected boolean insertProblem(InfoType problemType, String documentId, String fileName, String text) {
 		try {			    
-		    String qry = "INSERT INTO "+ (problemType == InfoType.Warning ?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + " (\"DocumentId\", \"Text\") VALUES(?, ?)";
+		    String qry = "INSERT INTO "+ (problemType == InfoType.Warning ?  AppProp.databaseWarningTable : AppProp.databaseErrorTable) + " (\"DocumentId\", \"DocumentName\", \"Text\") VALUES( ?, ?, ?)";
 		    Map<Integer, Object> params = new HashMap<Integer, Object>();
 		    params.put(1, documentId);
-		    params.put(2, text);
+		    params.put(2, fileName);
+		    params.put(3, text);
 		    runQuery(qry, params);
 			
 			return true;

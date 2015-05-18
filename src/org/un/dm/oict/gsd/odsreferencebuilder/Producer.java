@@ -1,6 +1,7 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
 import java.io.File;
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 
 import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
@@ -9,7 +10,6 @@ import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
  * @author Kevin Thomas Bradley
  * @dateCreated 1-May-2015
  * @description This is the producer class, which loops through the root file directory
- * ASDAS
  * @version 1.0
  * @codeReviewer
  */
@@ -21,6 +21,8 @@ public class Producer implements Runnable {
 	BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 	int solrFilesProduced = 0;
 	int referenceFilesProduced = 0;
+	int deltaRange = 20000;
+	int sleepMinutes = 10;
 
 	// Constructor accepting blocking queues
 	public Producer(BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments, int solrFilesProduced, int referenceFilesProduced) {
@@ -36,9 +38,14 @@ public class Producer implements Runnable {
 	 * Method called on running the thread
 	 */
 	public void run() {
-		// Start the process
-		System.out.println("INFO: Producer Started");
-		iterateFiles(AppProp.rootFileDirectory);	
+		try {
+			// Start the process
+			System.out.println("INFO: Producer Started");
+			iterateFiles(AppProp.rootFileDirectory);	
+			Helper.logMessage(InfoType.Info, "Producer finished");
+		} catch (Exception e) {
+			Helper.logMessage(InfoType.Error, "Overall Error in Producer - " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -65,7 +72,8 @@ public class Producer implements Runnable {
 					if (currXmlFilename.endsWith(".xml")) {
 						try {
 							// Instantiate two new SolrDocuments and one Reference Document
-							SolrDocument currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
+							SolrDocument currentSolrDocument = null; 
+							currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
 							SolrDocument newSolrDocument = new SolrDocument();
 							ReferenceDocument newReferenceDocument = new ReferenceDocument();
 							
@@ -100,7 +108,15 @@ public class Producer implements Runnable {
 		newSolrDocument = FileProcessor.processFile(currentSolrDocument, newSolrDocument);
 		processedSolrDocuments.add(newSolrDocument);	
 		solrFilesProduced++;
-		System.out.println("("+ solrFilesProduced +") Solr Document Produced : " + newSolrDocument.getId());
+		try {
+			if ((solrFilesProduced - AppProp.solrFilesConsumed) > deltaRange) {
+				Thread.sleep(sleepMinutes * 60 * 1000);
+			}
+		} catch (InterruptedException e) {
+			Helper.logMessage(InfoType.Error, "Thread sleep interrupted");
+		}
+		System.out.println(new Date().toString() + "("+ solrFilesProduced +") Solr Document Produced : " + newSolrDocument.getId());
+		Helper.logMessage(InfoType.Info, "("+ solrFilesProduced +") (BlockingQueue: " + processedSolrDocuments.size() + ") Solr Document Produced : " + newSolrDocument.getId());
 	}
 	
 	/**
@@ -114,6 +130,14 @@ public class Producer implements Runnable {
 		newReferenceDocument = FileProcessor.extractReferences(newSolrDocument, newReferenceDocument);
 		processedReferenceDocuments.add(newReferenceDocument);
 		referenceFilesProduced++;
-		System.out.println("(" + referenceFilesProduced + ")Reference Document Produced : " + newReferenceDocument.getId());
+		try {
+			if ((referenceFilesProduced - AppProp.referenceFilesConsumed) > deltaRange) {
+				Thread.sleep(sleepMinutes * 60 * 1000);
+			} 
+		} catch (InterruptedException e) {
+			Helper.logMessage(InfoType.Error, "Thread sleep interrupted");
+		}
+		System.out.println(new Date().toString() + "(" + referenceFilesProduced + ")Reference Document Produced : " + newReferenceDocument.getId());
+		Helper.logMessage(InfoType.Info, "(" + referenceFilesProduced + ") (BlockingQueue: " + processedReferenceDocuments.size() + ") Reference Document Produced : " + newReferenceDocument.getId());
 	}
 }

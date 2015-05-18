@@ -19,21 +19,17 @@ public class Service {
 	// Two blocking queues for storing the processed files and consuming them
 	static BlockingQueue<SolrDocument> processedSolrDocuments;
 	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
-	static int solrFilesConsumed = 0;
-	static int referenceFilesConsumed = 0;
 	static int solrFilesProduced = 0;
 	static int referenceFilesProduced = 0;
-	
 	/**
 	 * Entry point to application, sets variables, initializes the logs
 	 * and starts Producer and Consumer classes on threads
 	 * @param args
 	 */
 	public static void main(String args[]) {
-		
 		// Initialize the two blocking queues
-		processedSolrDocuments = new ArrayBlockingQueue<>(1000000);
-		processedReferenceDocuments = new ArrayBlockingQueue<>(1000000);
+		processedSolrDocuments = new ArrayBlockingQueue<>(1500000);
+		processedReferenceDocuments = new ArrayBlockingQueue<>(1500000);
 	
 		// Initialize the config file, log file and set the variables
 		System.out.println("INFO: Variables initialized");
@@ -43,9 +39,9 @@ public class Service {
 			// Start the Producer and Consumers on individual threads, therefore 3 threads
 			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
 	        new Thread(producer).start();
-	        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
+	        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments);
 	        new Thread(solrConsumer).start();
-	        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments, solrFilesConsumed, referenceFilesConsumed);
+	        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments);
 	        new Thread(referenceConsumer).start();
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());

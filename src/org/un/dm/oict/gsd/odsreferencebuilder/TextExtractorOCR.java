@@ -11,8 +11,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.apache.tika.Tika;
@@ -66,19 +64,19 @@ public class TextExtractorOCR {
 		//TODO DANIEL is using this path to find the requested PDF's 
 		pdfUrl = "/home/daniel/Desktop/testFiles/pdfs/" + pdfUrl.substring(pdfUrl.lastIndexOf("/")+1,pdfUrl.length() ).toUpperCase();
 		// Construct the cURL command
-		String[] command = { "curl",
-	            			"-T",
-	            			pdfUrl,
-	            			"http://localhost:9998/tika",
-	            			"--header",
-	            			"\"Accept: text/plain\""};
+//		String[] command = { "curl",
+//	            			"-T",
+//	            			pdfUrl,
+//	            			"http://localhost:9998/tika",
+//	            			"--header",
+//	            			"\"Accept: text/plain\""};
 		//String body = performProcess(command);
-		String body = extractorTika(new File (pdfUrl));
-		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
+		//String body = extractorTika(new File (pdfUrl));
+		//if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
 			// IMPROVEMENT could be automated to do performCompleteOCR
 			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika - Attempting to fix with full OCR");
-			//body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
-		}
+			String body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
+		//}
 			
 		return body;
 	}
@@ -182,9 +180,9 @@ public class TextExtractorOCR {
 		String[] command = { "gs",
         			"-dNOPAUSE",
         			"-sDEVICE=tiffg4",
-        			"-r600x600",
+        			//"-r300x300",
         			"-dBATCH",
-        			"-sPAPERSIZE=a4",
+        			//"-sPAPERSIZE=a4",
         			"-sOutputFile=" + imgFile,
         			pdfUrl};
 		performProcess(command);
@@ -202,7 +200,7 @@ public class TextExtractorOCR {
 			Files.delete(Paths.get(imgFile)); 
 			Files.delete(Paths.get(txtFile + ".txt"));
 		} catch (IOException e) {
-
+			System.out.println("Error while deleting files.");
 		} 
 		return body;
 	}
@@ -233,7 +231,7 @@ public class TextExtractorOCR {
 		if (languageCode.equals("en"))
 			return "eng";
 		else if (languageCode.equals("fr"))
-			return "fre";
+			return "fra";
 		else if (languageCode.equals("es"))
 			return "spa";
 		else if (languageCode.equals("ar"))

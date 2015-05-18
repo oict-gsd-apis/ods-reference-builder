@@ -11,11 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 //import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,8 +108,7 @@ public class Helper {
 		boolean found = false;
 	    Pattern pattern = Pattern.compile("\uFFFD");
 	    Matcher matcher = pattern.matcher(body);
-		while (matcher.find()) {
-			System.out.println("Invalid character found");
+		while (matcher.find()) {			
 			found = true;
 			break;
 		}		
@@ -149,14 +146,17 @@ public class Helper {
 		if (type == InfoType.Info) {
 			msg += "INFO:";
 			msg += " Id (" + ((newSolrDocument != null) ? newSolrDocument.getId() : "NOT SET") + ") " + message;
+			AppProp.log.info(msg);
 		} else if (type == InfoType.Warning) {
 			msg += "WARNING:";
 			msg += " Id (" + ((newSolrDocument != null) ? newSolrDocument.getId() : "NOT SET") + ") " + message;
-			AppProp.database.insertWarning(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET", msg);
+			AppProp.database.insertWarning(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET",newSolrDocument != null ? newSolrDocument.getFilename() : "NO FILENAME", msg);
+			AppProp.log.warn(msg);
 		} else if (type == InfoType.Error) {
 			msg += "ERROR:";
 			msg += " Id (" + ((newSolrDocument != null) ? newSolrDocument.getId() : "NOT SET") + ") " + message;
-			AppProp.database.insertError(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET", msg);
+			AppProp.database.insertError(newSolrDocument != null ? newSolrDocument.getId() : "NOT SET" ,newSolrDocument != null ? newSolrDocument.getFilename() : "NO FILENAME" ,msg );
+			AppProp.log.error(msg);
 		}
 		System.out.println(msg);
 		return true;

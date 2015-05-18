@@ -19,7 +19,7 @@ public abstract class OutputDatabase {
 	
 	abstract boolean insertDocument(String documentType, String documentId, String documentSymbol, String language, String title, String folder, String fileName);
 	
-	abstract boolean insertProblem(InfoType problemType, String documentId, String text);
+	abstract boolean insertProblem(InfoType problemType, String documentId, String fileName, String text);
 	
 	abstract void runQuery(String query, Map<Integer, Object> params);
 	
@@ -27,7 +27,7 @@ public abstract class OutputDatabase {
 	
 	abstract boolean insertReferenceDocument(ReferenceDocument newReferenceDocument);
 	
-	abstract boolean insertWarning(String documentId, String text);
+	abstract boolean insertWarning(String documentId, String documentName, String text);
 	
-	abstract boolean insertError(String documentId, String text);
+	abstract boolean insertError(String documentId, String documentName, String text);
 }

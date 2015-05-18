@@ -1,5 +1,6 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -23,17 +24,13 @@ public class Consumer implements Runnable {
 	// by the Consumer class
 	BlockingQueue<SolrDocument> processedSolrDocuments;
 	BlockingQueue<ReferenceDocument> processedReferenceDocuments;
-	int solrFilesConsumed = 0;
-	int referenceFilesConsumed = 0;
 	ConsumerRunType runType;
 
 	// Constructor accepting blocking queues
-	public Consumer(ConsumerRunType runType, BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments, int solrFilesConsumed, int referenceFilesConsumed) {
+	public Consumer(ConsumerRunType runType, BlockingQueue<SolrDocument> processedSolrDocuments, BlockingQueue<ReferenceDocument> processedReferenceDocuments) {
 		// Set the local variables with the ones passed into during instantiation
 		this.processedSolrDocuments = processedSolrDocuments;
 		this.processedReferenceDocuments = processedReferenceDocuments;
-		this.solrFilesConsumed = solrFilesConsumed;
-		this.referenceFilesConsumed = referenceFilesConsumed;
 		this.runType = runType;
 	}
 
@@ -43,29 +40,33 @@ public class Consumer implements Runnable {
 	 */
 	public void run() {
 		try {
-			// Sleep X seconds, allowing enough time for both
-			// blocking queues to have an initial document
-			System.out.println("INFO: Consumer (" + runType + ") Waiting");
-			Thread.sleep(30 * 1000);
+			try {
+				// Sleep X seconds, allowing enough time for both
+				// blocking queues to have an initial document
+				System.out.println("INFO: Consumer (" + runType + ") Waiting");
+				Thread.sleep(30 * 1000);
+				
+			} catch (InterruptedException e) {
+				Helper.logMessage(InfoType.Error, e.getMessage());
+			}
 			
-		} catch (InterruptedException e) {
-			Helper.logMessage(InfoType.Error, e.getMessage());
-		}
-		
-		if (runType.equals(ConsumerRunType.Solr)) { 
-			// Process Solr Documents
-	    	if (processedSolrDocuments.size() > 0) {
-	    		System.out.println("INFO: Consumer (" + runType + ") Started");
-	    		processSolrDocuments();
-	    	} 
-		}
-    	
-		if (runType.equals(ConsumerRunType.Reference)) {
-	    	// Process Reference Documents
-	    	if (processedReferenceDocuments.size() > 0) {
-	    		System.out.println("INFO: Consumer (" + runType + ") Started");
-	    		processReferenceDocuments();
-	    	} 
+			if (runType.equals(ConsumerRunType.Solr)) { 
+				// Process Solr Documents
+		    	if (processedSolrDocuments.size() > 0) {
+		    		System.out.println("INFO: Consumer (" + runType + ") Started");
+		    		processSolrDocuments();
+		    	} 
+			}
+	    	
+			if (runType.equals(ConsumerRunType.Reference)) {
+		    	// Process Reference Documents
+		    	if (processedReferenceDocuments.size() > 0) {
+		    		System.out.println("INFO: Consumer (" + runType + ") Started");
+		    		processReferenceDocuments();
+		    	} 
+			}
+		} catch (Exception e) {
+			Helper.logMessage(InfoType.Error, "Overall Error in Consumer - " + e.getMessage());
 		}
 	}
 	
@@ -79,9 +80,9 @@ public class Consumer implements Runnable {
 				// Write out newly created Solr Document
 				OutputFile of = new OutputFile();
 				of.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
-				solrFilesConsumed++;
-				System.out.println("(" + solrFilesConsumed + ") Solr Document Consumed : " + currentSolrDocument.getId());
-				
+				AppProp.solrFilesConsumed++;
+				System.out.println(new Date().toString() + "(" + AppProp.solrFilesConsumed + ") Solr Document Consumed : " + currentSolrDocument.getId());
+				Helper.logMessage(InfoType.Info, "(" + AppProp.solrFilesConsumed + ") (BlockingQueue: " + processedSolrDocuments.size() + ") Solr Document Consumed : " + currentSolrDocument.getId());
 				// Store in Database
 				AppProp.database.insertSolrDocument(currentSolrDocument);
 				// Optional Function - Write the document to Solr
@@ -91,7 +92,8 @@ public class Consumer implements Runnable {
 			}
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
-		}	
+		}
+    	Helper.logMessage(InfoType.Info, "Consumer finished for Solr Documents");
 	}
 	
 	/**
@@ -104,11 +106,15 @@ public class Consumer implements Runnable {
 				// Write out newly created Reference Document
 				OutputFile of = new OutputFile();
 				of.writeReferenceDocument(currentReferenceDocument.buildNewFilename(), currentReferenceDocument.toString());
-				referenceFilesConsumed++;
-				System.out.println("(" + referenceFilesConsumed + ") Reference Document Consumed : " + currentReferenceDocument.getId());
+				AppProp.referenceFilesConsumed++;
+				System.out.println(new Date().toString() + "(" + AppProp.referenceFilesConsumed + ") Reference Document Consumed : " + currentReferenceDocument.getId());
+				Helper.logMessage(InfoType.Info, "(" + AppProp.referenceFilesConsumed + ") (BlockingQueue: " + processedReferenceDocuments.size() + ") Reference Document Consumed : " + currentReferenceDocument.getId());
+				// Store in Database
+				AppProp.database.insertReferenceDocument(currentReferenceDocument);
 			}
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
-		}		
+		}
+    	Helper.logMessage(InfoType.Info, "Consumer finished for Reference Documents");
 	}
 }

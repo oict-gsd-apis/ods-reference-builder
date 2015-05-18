@@ -46,4 +46,7 @@ public class AppProp {
 	
 	protected static boolean debug = false;
 	
+	protected static int solrFilesConsumed = 0;
+	protected static int referenceFilesConsumed = 0;
+	
 }

@@ -1,11 +1,8 @@
 package org.un.dm.oict.gsd.odsreferencebuilder;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -167,7 +164,7 @@ public class FileProcessor {
 	private static SolrDocument processEmptyTitles(SolrDocument newSolrDocument) { 
 		// Log these values to a particular DB Table
 		if (newSolrDocument.getTitle().isEmpty())
-			AppProp.database.insertWarning(newSolrDocument.getId(), "Empty Title");
+			AppProp.database.insertWarning(newSolrDocument.getId(), newSolrDocument.getFilename() ,"Empty Title");
 		return newSolrDocument;
 	}
 	
@@ -195,9 +192,9 @@ public class FileProcessor {
 		//if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
 		if (newSolrDocument.getRequiresNewBody()) {
 			Helper.logMessage(InfoType.Warning, newSolrDocument, "newBody Required");
-			String newBody = TextExtractorOCR.obtainText(newSolrDocument);
-			if (!newBody.isEmpty()) 
-				newSolrDocument.setBody( newBody );
+//			String newBody = TextExtractorOCR.obtainText(newSolrDocument);
+//			if (!newBody.isEmpty()) 
+//				newSolrDocument.setBody( newBody );
 		}
 		return newSolrDocument;
 	}

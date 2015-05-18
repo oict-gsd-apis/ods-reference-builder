@@ -87,8 +87,8 @@ public class SolrDocument {
 								xml += "<field name=\"" + field.getName() + "\">"
 								+ Helper.makeXMLTextSafeUrl(field.get(this).toString()) + "</field>\n";
 							} else if (field.getName().toLowerCase().contains("body")) {
-								xml += "<field name=\"" + field.getName() + "\">" + field.get(this).toString() + "</field>\n";
-								//+ Helper.makeXMLTextSafe(field.get(this).toString()) + "</field>\n";
+								xml += "<field name=\"" + field.getName() + "\">" 
+								+ Helper.makeXMLTextSafe(field.get(this).toString()) + "</field>\n";
 							} else {
 								xml += "<field name=\"" + field.getName() + "\">"
 								+ Helper.makeXMLTextSafeField(field.get(this).toString()) + "</field>\n";
