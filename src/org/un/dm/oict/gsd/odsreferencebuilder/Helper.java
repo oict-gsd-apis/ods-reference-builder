@@ -6,6 +6,7 @@ package org.un.dm.oict.gsd.odsreferencebuilder;
 //import java.io.InputStream;
 //import java.net.URL;
 import java.io.File;
+import java.io.FileReader;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.un.dm.oict.gsd.odsreferencebuilder.OutputDatabaseMSSQL.InfoType;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * @author Kevin Thomas Bradley
@@ -335,6 +338,21 @@ public class Helper {
 		     }		    	 
 		  }
     }
+    
+    /**
+     * 
+     * @param filename
+     * @return
+     */
+	static CSVReader readCSV(String filename) {
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new FileReader(filename));
+		} catch (Exception e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+		return reader;
+	}
 //   
 //	    
 //	/**

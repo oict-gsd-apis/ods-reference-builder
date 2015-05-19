@@ -192,9 +192,27 @@ public class FileProcessor {
 		//if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
 		if (newSolrDocument.getRequiresNewBody()) {
 			Helper.logMessage(InfoType.Warning, newSolrDocument, "newBody Required");
-//			String newBody = TextExtractorOCR.obtainText(newSolrDocument);
-//			if (!newBody.isEmpty()) 
-//				newSolrDocument.setBody( newBody );
+			//String newBody = TextExtractorOCR.obtainText(newSolrDocument);
+			//if (!newBody.isEmpty()) 
+			//	newSolrDocument.setBody( newBody );
+		}
+		return newSolrDocument;
+	}
+	
+	/**
+	 * 
+	 * @param newSolrDocument
+	 * @return
+	 */
+	protected static SolrDocument processBodyTextErroneous(SolrDocument newSolrDocument) { 
+		String body = newSolrDocument.getBody();
+		if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
+			Helper.logMessage(InfoType.Info, newSolrDocument, "Processing new body");
+			String newBody = TextExtractorOCR.performCompleteOCR(newSolrDocument.getUrlJob(), newSolrDocument.getLanguageCode());
+			if (!newBody.isEmpty()) 
+				newSolrDocument.setBody( newBody );
+			else
+				Helper.logMessage(InfoType.Error, newSolrDocument, "Body empty after processing again");
 		}
 		return newSolrDocument;
 	}

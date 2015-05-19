@@ -21,6 +21,7 @@ public class Service {
 	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 	static int solrFilesProduced = 0;
 	static int referenceFilesProduced = 0;
+	static boolean stamdardService = false;
 	/**
 	 * Entry point to application, sets variables, initializes the logs
 	 * and starts Producer and Consumer classes on threads
@@ -36,18 +37,23 @@ public class Service {
 		initializeVariables();
 		
 		try { 	
-			// Start the Producer and Consumers on individual threads, therefore 3 threads
-			Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
-	        new Thread(producer).start();
-	        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments);
-	        new Thread(solrConsumer).start();
-	        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments);
-	        new Thread(referenceConsumer).start();
+			if (stamdardService) {
+				// Start the Producer and Consumers on individual threads, therefore 3 threads
+				Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
+		        new Thread(producer).start();
+		        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments);
+		        new Thread(solrConsumer).start();
+		        Consumer referenceConsumer = new Consumer(ConsumerRunType.Reference, processedSolrDocuments, processedReferenceDocuments);
+		        new Thread(referenceConsumer).start();
+			} else {
+				BodyProducer producer = new BodyProducer(processedSolrDocuments);
+		        new Thread(producer).start();
+		        Consumer solrConsumer = new Consumer(ConsumerRunType.Solr, processedSolrDocuments, processedReferenceDocuments);
+		        new Thread(solrConsumer).start();
+			}
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
-		//AppProp.tempTesseractImgOutputDir = "dir";
-		//TextExtractorOCR.performCompleteOCR("pdfLoc" , "ar");
 	}
 	
 	/**

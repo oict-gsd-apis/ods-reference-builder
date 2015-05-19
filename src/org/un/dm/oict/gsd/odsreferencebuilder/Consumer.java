@@ -17,7 +17,8 @@ public class Consumer implements Runnable {
 	
 	protected enum ConsumerRunType {
 		Solr,
-		Reference
+		Reference,
+		Body
 	}
 
 	// Create two BlockingQueue variables to store the documents for processing
@@ -65,6 +66,14 @@ public class Consumer implements Runnable {
 		    		processReferenceDocuments();
 		    	} 
 			}
+			
+			if (runType.equals(ConsumerRunType.Body)) {
+				// Process Solr Documents
+		    	if (processedSolrDocuments.size() > 0) {
+		    		System.out.println("INFO: Consumer (" + runType + ") Started");
+		    		processSolrBodyDocuments();
+		    	}
+			}
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, "Overall Error in Consumer - " + e.getMessage());
 		}
@@ -94,6 +103,29 @@ public class Consumer implements Runnable {
 			Helper.logMessage(InfoType.Error, e.getMessage());
 		}
     	Helper.logMessage(InfoType.Info, "Consumer finished for Solr Documents");
+	}
+	
+	private void processSolrBodyDocuments() {
+		SolrDocument currentSolrDocument = null;
+    	try {
+			while ((currentSolrDocument = processedSolrDocuments.poll(AppProp.pollDuration, TimeUnit.MINUTES)) != null) {
+				// Write out newly created Solr Document
+				OutputFile of = new OutputFile();
+				of.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
+				AppProp.solrFilesConsumed++;
+				System.out.println(new Date().toString() + "(" + AppProp.solrFilesConsumed + ") Solr Body Document Consumed : " + currentSolrDocument.getId());
+				Helper.logMessage(InfoType.Info, "(" + AppProp.solrFilesConsumed + ") (BlockingQueue: " + processedSolrDocuments.size() + ") Solr Body Document Consumed : " + currentSolrDocument.getId());
+				// Store in Database
+				AppProp.database.insertSolrDocument(currentSolrDocument);
+				// Optional Function - Write the document to Solr
+				if (AppProp.writeSolrDocumentToSolr) {
+					OutputSolr.writeDocumentToSolr();
+				}
+			}
+		} catch (Exception e) {
+			Helper.logMessage(InfoType.Error, e.getMessage());
+		}
+    	Helper.logMessage(InfoType.Info, "Consumer finished for Solr Body Documents");
 	}
 	
 	/**

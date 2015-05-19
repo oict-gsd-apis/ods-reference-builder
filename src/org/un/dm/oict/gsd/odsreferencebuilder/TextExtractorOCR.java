@@ -61,23 +61,21 @@ public class TextExtractorOCR {
 	protected static String performCURLCommand(SolrDocument newSolrDocument) {
 		String pdfUrl = newSolrDocument.getUrlJob();
 		//pdfUrl = pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/DATA/" + pdfUrl;
-		//TODO DANIEL is using this path to find the requested PDF's 
 		pdfUrl = "/home/daniel/Desktop/testFiles/pdfs/" + pdfUrl.substring(pdfUrl.lastIndexOf("/")+1,pdfUrl.length() ).toUpperCase();
 		// Construct the cURL command
-//		String[] command = { "curl",
-//	            			"-T",
-//	            			pdfUrl,
-//	            			"http://localhost:9998/tika",
-//	            			"--header",
-//	            			"\"Accept: text/plain\""};
-		//String body = performProcess(command);
-		//String body = extractorTika(new File (pdfUrl));
-		//if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
+		/*String[] command = { "curl",
+	            			"-T",
+	            			pdfUrl,
+	            			"http://localhost:9998/tika",
+	            			"--header",
+	            			"\"Accept: text/plain\""};
+		String body = performProcess(command);*/
+		String body = extractorTika(new File (pdfUrl));
+		if (Helper.checkBodyContainsInvalidChars(body, AppProp.invalidChars)) {
 			// IMPROVEMENT could be automated to do performCompleteOCR
 			Helper.logMessage(InfoType.Warning, newSolrDocument, "Body Invalid after tika - Attempting to fix with full OCR");
-			String body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
-		//}
-			
+			body = performCompleteOCR(pdfUrl, newSolrDocument.getLanguageCode());
+		}	
 		return body;
 	}
 	
