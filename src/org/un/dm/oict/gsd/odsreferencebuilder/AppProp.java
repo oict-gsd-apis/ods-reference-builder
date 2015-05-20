@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 public class AppProp {
 	
 	protected static String rootFileDirectory = "";
+	protected static String problematicBodyFilenames = "";
 	
 	protected static String solrInstance = "";
 	protected static String solrCollection = "";

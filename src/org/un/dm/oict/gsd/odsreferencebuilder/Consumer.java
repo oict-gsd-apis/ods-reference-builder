@@ -68,6 +68,8 @@ public class Consumer implements Runnable {
 			}
 			
 			if (runType.equals(ConsumerRunType.Body)) {
+				System.out.println("INFO: Consumer (" + runType + ") Waiting");
+				Thread.sleep(120 * 1000);
 				// Process Solr Documents
 		    	if (processedSolrDocuments.size() > 0) {
 		    		System.out.println("INFO: Consumer (" + runType + ") Started");
@@ -111,7 +113,7 @@ public class Consumer implements Runnable {
 			while ((currentSolrDocument = processedSolrDocuments.poll(AppProp.pollDuration, TimeUnit.MINUTES)) != null) {
 				// Write out newly created Solr Document
 				OutputFile of = new OutputFile();
-				of.writeSolrDocument(currentSolrDocument.buildNewFilename(), currentSolrDocument.toString());
+				of.writeSolrDocument(currentSolrDocument.buildNewBodyFilename(), currentSolrDocument.toString());
 				AppProp.solrFilesConsumed++;
 				System.out.println(new Date().toString() + "(" + AppProp.solrFilesConsumed + ") Solr Body Document Consumed : " + currentSolrDocument.getId());
 				Helper.logMessage(InfoType.Info, "(" + AppProp.solrFilesConsumed + ") (BlockingQueue: " + processedSolrDocuments.size() + ") Solr Body Document Consumed : " + currentSolrDocument.getId());

@@ -205,14 +205,14 @@ public class FileProcessor {
 	 * @return
 	 */
 	protected static SolrDocument processBodyTextErroneous(SolrDocument newSolrDocument) { 
-		String body = newSolrDocument.getBody();
-		if (newSolrDocument.getRequiresNewBody() || body.isEmpty() || body.length() < 1) {
-			Helper.logMessage(InfoType.Info, newSolrDocument, "Processing new body");
-			String newBody = TextExtractorOCR.performCompleteOCR(newSolrDocument.getUrlJob(), newSolrDocument.getLanguageCode());
-			if (!newBody.isEmpty()) 
-				newSolrDocument.setBody( newBody );
-			else
-				Helper.logMessage(InfoType.Error, newSolrDocument, "Body empty after processing again");
+		Helper.logMessage(InfoType.Info, newSolrDocument, "Processing new body");
+		String newBody = TextExtractorOCR.performCompleteOCR(newSolrDocument.getUrlJob(), newSolrDocument.getLanguageCode());
+		if (!newBody.isEmpty()) {
+			newSolrDocument.setBody( newBody );
+			newSolrDocument.setRequiresNewBody(false);
+		} else {
+			Helper.logMessage(InfoType.Error, newSolrDocument, "Body empty after processing again");
+			newSolrDocument.setRequiresNewBody(true);
 		}
 		return newSolrDocument;
 	}

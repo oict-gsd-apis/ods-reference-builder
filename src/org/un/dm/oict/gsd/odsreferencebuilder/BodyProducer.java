@@ -35,7 +35,7 @@ public class BodyProducer implements Runnable {
 		try {
 			// Start the process
 			System.out.println("INFO: Body Producer Started");
-			iterateFiles(AppProp.rootFileDirectory);	
+			iterateFiles(AppProp.problematicBodyFilenames);	
 			Helper.logMessage(InfoType.Info, "Body Producer finished");
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, "Overall Error in Producer - " + e.getMessage());
@@ -60,6 +60,8 @@ public class BodyProducer implements Runnable {
 						// Instantiate a mew SolrDocument and map the data onto it
 						SolrDocument currentSolrDocument = null; 
 						currentSolrDocument = TextExtractorFile.readXmlDocument(currXmlFilename);
+						
+						currentSolrDocument.setFilename(currXmlFilename);
 
 						System.out.println("INFO: Beginning to process - " + currXmlFilename);
 

@@ -169,6 +169,7 @@ public class TextExtractorOCR {
 	 * @return
 	 */
 	protected static String performCompleteOCR(String pdfUrl, String languageCode) {
+		pdfUrl = pdfUrl.contains("/mnt/y_drive/")? pdfUrl: "/mnt/y_drive/DATA/" + pdfUrl;
 		String tempId = UUID.randomUUID().toString();
 		String imgFile = AppProp.tempTesseractImgOutputDir + "" + tempId + ".tif";
 		String txtFile = AppProp.tempTesseractImgOutputDir + "" + tempId + "";
