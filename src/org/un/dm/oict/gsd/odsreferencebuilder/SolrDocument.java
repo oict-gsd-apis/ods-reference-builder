@@ -119,11 +119,8 @@ public class SolrDocument {
 	public String buildNewBodyFilename() {
 		try {
 			String tf = this.filename.substring(this.filename.lastIndexOf("/")+1, this.filename.length());
-			String cP = this.filename.substring(0,this.filename.lastIndexOf("/"));
-			String fn = this.filename.substring( cP.lastIndexOf("/")+1, cP.length());
 			String newfilename = tf.substring(0, tf.indexOf(".xml")) + "_modified.xml";
-			//return AppProp.documentOutputFolder + "/" + fn + "/" + newfilename;
-			return "/home/daniel/Desktop/newBodyFiles_ru/" + newfilename;
+			return AppProp.bodyOutputDirectory + newfilename;
 		} catch (Exception e) {
 			Helper.logMessage(InfoType.Error, e.getMessage());
 			return "";

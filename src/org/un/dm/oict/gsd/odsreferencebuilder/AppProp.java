@@ -50,4 +50,7 @@ public class AppProp {
 	protected static int solrFilesConsumed = 0;
 	protected static int referenceFilesConsumed = 0;
 	
+	protected static boolean standardService = false;
+	protected static String bodyOutputDirectory = "";
+	
 }

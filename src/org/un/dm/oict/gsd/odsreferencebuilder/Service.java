@@ -21,7 +21,6 @@ public class Service {
 	static BlockingQueue<ReferenceDocument> processedReferenceDocuments;
 	static int solrFilesProduced = 0;
 	static int referenceFilesProduced = 0;
-	static boolean standardService = false;
 	/**
 	 * Entry point to application, sets variables, initializes the logs
 	 * and starts Producer and Consumer classes on threads
@@ -37,7 +36,7 @@ public class Service {
 		initializeVariables();
 		
 		try { 	
-			if (standardService) {
+			if (AppProp.standardService) {
 				// Start the Producer and Consumers on individual threads, therefore 3 threads
 				Producer producer = new Producer(processedSolrDocuments, processedReferenceDocuments, solrFilesProduced, referenceFilesProduced);
 		        new Thread(producer).start();
@@ -69,6 +68,8 @@ public class Service {
 		AppProp.debug = Boolean.parseBoolean(Helper.getProperty("debug"));
 		AppProp.tempTesseractImgOutputDir = Helper.getProperty("tempTesseractImgOutputDir");
 		AppProp.problematicBodyFilenames = Helper.getProperty("problematicBodyFilenames");
+		AppProp.bodyOutputDirectory = Helper.getProperty("bodyOutputDirectory");
+		AppProp.standardService = Boolean.parseBoolean(Helper.getProperty("standardService"));
 		AppProp.rootFileDirectory = Helper.getProperty("rootFileDirectory");
 		AppProp.referenceOutputFolder = Helper.getProperty("referenceOutputFolder");
 		AppProp.documentOutputFolder = Helper.getProperty("documentOutputFolder");
